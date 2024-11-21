@@ -1,0 +1,18 @@
+.selected-button {
+    color: white !important;
+    background-color: #1976d2 !important;
+    border: 1px solid #1976d2 !important;
+    border-radius: 5px !important;
+    padding: 8px 12px !important;  /* Ajusta el padding según tus necesidades */
+    font-size: 14px !important;   /* Ajusta el tamaño de la fuente según tus necesidades */
+  }
+  
+  .default-button {
+    color: initial !important;
+    background-color: transparent !important;
+    border: 1px solid #ccc !important;
+    border-radius: 5px !important;
+    padding: 8px 12px !important;  /* Ajusta el padding según tus necesidades */
+    font-size: 14px !important;   /* Ajusta el tamaño de la fuente según tus necesidades */
+  }
+  
