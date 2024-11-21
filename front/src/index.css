@@ -1,0 +1,33 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Rambla", sans-serif !important;
+
+}
+
+.rambla-regular {
+    font-family: "Rambla", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    /* font-size: 16px; */
+}
+
+.rambla-bold {
+    font-family: "Rambla", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+  }
+  
+  .rambla-regular-italic {
+    font-family: "Rambla", sans-serif;
+    font-weight: 400;
+    font-style: italic;
+  }
+  
+  .rambla-bold-italic {
+    font-family: "Rambla", sans-serif;
+    font-weight: 700;
+    font-style: italic;
+  }
+  
