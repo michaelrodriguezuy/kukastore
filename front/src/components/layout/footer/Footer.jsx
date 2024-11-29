@@ -6,8 +6,7 @@ import { Outlet } from "react-router-dom";
 import { alpha } from "@mui/material/styles";
 
 const Footer = () => {
-
-  const customBlack = alpha('#000', 0.8); //color negro especial
+  const customBlack = alpha("#000", 0.8); //color negro especial
 
   return (
     <>
@@ -18,16 +17,16 @@ const Footer = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          backgroundColor: customBlack,
-          color: "whitesmoke",
+          backgroundColor: "whitesmoke",
+          color: "black",
           padding: "5px",
           width: "100%",
           position: "fixed",
           bottom: "0",
-          left: 0,                   
+          left: 0,
         }}
       >
-        <p >© 2024 India Cueros. Todos los derechos reservados.</p>
+        <p>© 2023 KukaStore. Todos los derechos reservados.</p>
 
         <Toolbar
           sx={{
@@ -46,23 +45,23 @@ const Footer = () => {
             }}
           >
             <Link
-              href="https://api.whatsapp.com/send?phone=59844525387&text=Hola%India%Cueros"
+              href="https://api.whatsapp.com/send?phone=59899429817"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: "whitesmoke", textDecoration: "none" }}
+              style={{ color: "black", textDecoration: "none" }}
             >
               <Tooltip title="Enviame un whatsapp">
-                <WhatsAppIcon sx={{ color: "whitesmoke" }} />
+                <WhatsAppIcon sx={{ color: "black" }} />
               </Tooltip>
             </Link>
             <Link
-              href="https://www.instagram.com/india.cueros/"
+              href="https://www.instagram.com/kuka_uy/"
               target="_blank"
               rel="noopener noreferrer"
               style={{ color: "whitesmoke", textDecoration: "none" }}
             >
               <Tooltip title="Contactame por instagram">
-                <InstagramIcon sx={{ color: "whitesmoke" }} />
+                <InstagramIcon sx={{ color: "black" }} />
               </Tooltip>
             </Link>
           </Box>

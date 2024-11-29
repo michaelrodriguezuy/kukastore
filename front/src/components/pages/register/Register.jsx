@@ -100,14 +100,14 @@ const Register = () => {
   const sendEmail = async (email) => {
     console.log("Enviando correo electrónico a:", email);
     try {
-      const response = await axios.post(
-        "https://indiacuerosback.vercel.app/send-email-register",
-        {
       // const response = await axios.post(
-      //   "http://localhost:8081/send-email-register",
+      //   "https://indiacuerosback.vercel.app/send-email-register",
       //   {
+      const response = await axios.post(
+        "http://localhost:8081/send-email-register",
+        {
           to: email,
-          subject: "Confirmación de registro en eCommerce2",
+          subject: "Confirmación de registro en kukaStore",
           text: "Gracias por registrarte en nuestro sitio.",
         }
       );

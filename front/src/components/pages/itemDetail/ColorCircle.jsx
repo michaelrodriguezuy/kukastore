@@ -29,6 +29,9 @@ const ColorCircle = ({
     // history.push(`/itemDetail/${productID}?color=${colorCode}`);
   };
 
+  const borderColor =
+    selectedColor === colorCode || colorCode === "#FFFFFF" ? "black" : "transparent";
+
   return (
     <div
       style={{
@@ -40,7 +43,7 @@ const ColorCircle = ({
         display: "inline-block",
         cursor: "pointer",
         position: "relative",
-        border: `2px solid ${selectedColor === colorCode ? "black" : "transparent"}`,
+        border: `2px solid ${borderColor}`,
       }}
       onClick={handleClick}
     ></div>

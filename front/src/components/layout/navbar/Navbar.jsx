@@ -27,7 +27,7 @@ import { Login } from "@mui/icons-material";
 import { alpha } from "@mui/material/styles";
 
 //import Img from "../../../assets/logo/football-sin-fondo.png";
-import logo from "../../../assets/logo/india6.webp";
+import logo from "../../../assets/logo/logo.png";
 
 const drawerWidth = 200;
 
@@ -56,9 +56,9 @@ function Navbar(props) {
               <ListItem disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <Icon sx={{ color: "whitesmoke" }} />
+                    <Icon sx={{ color: "black" }} />
                   </ListItemIcon>
-                  <ListItemText primary={title} sx={{ color: "whitesmoke" }} />
+                  <ListItemText primary={title} sx={{ color: "black" }} />
                 </ListItemButton>
               </ListItem>
             </Link>
@@ -71,11 +71,11 @@ function Navbar(props) {
               <ListItem disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <LocalGroceryStoreIcon sx={{ color: "whitesmoke" }} />
+                    <LocalGroceryStoreIcon sx={{ color: "black" }} />
                   </ListItemIcon>
                   <ListItemText
                     primary={"Mis datos"}
-                    sx={{ color: "whitesmoke" }}
+                    sx={{ color: "black" }}
                   />
                 </ListItemButton>
               </ListItem>
@@ -85,11 +85,11 @@ function Navbar(props) {
               <ListItem disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <LocalGroceryStoreIcon sx={{ color: "whitesmoke" }} />
+                    <LocalGroceryStoreIcon sx={{ color: "black" }} />
                   </ListItemIcon>
                   <ListItemText
                     primary={"Mis compras"}
-                    sx={{ color: "whitesmoke" }}
+                    sx={{ color: "black" }}
                   />
                 </ListItemButton>
               </ListItem>
@@ -99,11 +99,11 @@ function Navbar(props) {
                 <ListItem disablePadding>
                   <ListItemButton>
                     <ListItemIcon>
-                      <DashboardIcon sx={{ color: "whitesmoke" }} />
+                      <DashboardIcon sx={{ color: "black" }} />
                     </ListItemIcon>
                     <ListItemText
                       primary={"Dashboard"}
-                      sx={{ color: "whitesmoke" }}
+                      sx={{ color: "black" }}
                     />
                   </ListItemButton>
                 </ListItem>
@@ -113,11 +113,11 @@ function Navbar(props) {
             <ListItem disablePadding>
               <ListItemButton component={Link} to="/logout">
                 <ListItemIcon>
-                  <LogoutIcon sx={{ color: "whitesmoke" }} />
+                  <LogoutIcon sx={{ color: "black" }} />
                 </ListItemIcon>
                 <ListItemText
                   primary={"Cerrar sesion"}
-                  sx={{ color: "whitesmoke" }}
+                  sx={{ color: "black" }}
                 />
               </ListItemButton>
             </ListItem>
@@ -128,11 +128,11 @@ function Navbar(props) {
           <ListItem disablePadding>
             <ListItemButton component={Link} to="/login">
               <ListItemIcon>
-                <Login sx={{ color: "whitesmoke" }} />
+                <Login sx={{ color: "black" }} />
               </ListItemIcon>
               <ListItemText
                 primary={"Iniciar sesion"}
-                sx={{ color: "whitesmoke" }}
+                sx={{ color: "black" }}
               />
             </ListItemButton>
           </ListItem>
@@ -151,7 +151,7 @@ function Navbar(props) {
         position="fixed"
         sx={{
           width: "100%",
-          backgroundColor: customBlack,
+          backgroundColor: "whitesmoke",
         }}
       >
         <Toolbar
@@ -162,11 +162,11 @@ function Navbar(props) {
             alignItems: "center",
           }}
         >
-          <Link to="/" style={{ color: "whitesmoke" }}>
+          <Link to="/" style={{ color: "black" }}>
             {/* logo */}
             <img
               src={logo}
-              alt="India Cueros"
+              alt="kukaStore"
               style={{
                 height: "57px",
                 display: "flex",
@@ -185,19 +185,19 @@ function Navbar(props) {
             <Link key="cart" to="/cart">
               <IconButton>
                 <Badge badgeContent={getTotalItems()} color="info">
-                  <LocalGroceryStoreIcon sx={{ color: "whitesmoke" }} />
+                  <LocalGroceryStoreIcon sx={{ color: "black" }} />
                 </Badge>
               </IconButton>
             </Link>
 
             <IconButton
               // color="secondary.primary"
-              sx={{ color: "whitesmoke" }}
+              sx={{ color: "black" }}
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
             >
-              <MenuIcon sx={{ color: "whitesmoke" }} />
+              <MenuIcon sx={{ color: "black" }} />
             </IconButton>
           </Box>
         </Toolbar>
@@ -217,7 +217,7 @@ function Navbar(props) {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
-              backgroundColor: customBlack,
+              backgroundColor: "whitesmoke",
             },
           }}
         >
