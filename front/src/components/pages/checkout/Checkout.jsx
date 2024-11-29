@@ -232,8 +232,8 @@ const Checkout = () => {
     console.log("Enviando solicitud al server...");
     try {
       let response = await axios.post(
-        // "http://localhost:8081/create_preference",
-        "https://indiacuerosback.vercel.app/create_preference",
+        "http://localhost:8081/create_preference",
+        // "https://indiacuerosback.vercel.app/create_preference",
         {
           items: items,
           shipment_cost: parseFloat(shipmentCost),
@@ -253,16 +253,16 @@ const Checkout = () => {
 
   const sendEmailUser = async () => {
     try {
-      const response = await axios.post(
-        "https://indiacuerosback.vercel.app/send-email-checkout-user",
-        {
-          // const response = await axios.post(
-          //   "http://localhost:8081/send-email-checkout-user",
-          //   {
+      // const response = await axios.post(
+      //   "https://indiacuerosback.vercel.app/send-email-checkout-user",
+      //   {
+          const response = await axios.post(
+            "http://localhost:8081/send-email-checkout-user",
+            {
           to: user.email,
           subject:
             'Puedes ver los datos de tu compra entrando a tu perfil en la opcion "Mis compras"',
-          text: "Datos de tu compra en e-Commerce",
+          text: "Datos de tu compra en kukastore",
         }
       );
 
@@ -273,15 +273,14 @@ const Checkout = () => {
   };
   const sendEmail = async () => {
     try {
-      const response = await axios.post(
-        "https://indiacuerosback.vercel.app/send-email-checkout",
-        {
-          // const response = await axios.post(
-          //   "http://localhost:8081/send-email-checkout",
-          //   {
-          // to: "indiacuerosapp@gmail.com", //correo del comercio
-          to: "indiacueros83@gmail.com", //correo del comercio
-          subject: "Se ha recibido una nueva venta con el ID: " + orderId,
+      // const response = await axios.post(
+      //   "https://indiacuerosback.vercel.app/send-email-checkout",
+      //   {
+          const response = await axios.post(
+            "http://localhost:8081/send-email-checkout",
+            {         
+          to: "mefy29.5@hotmail.com", //correo del comercio, no tiene que ser el mismo que el que se usa para enviar
+          subject: "Se ha realizado una nueva venta con el ID: " + orderId,
           text: "Datos de una venta en su e-Commerce",
         }
       );
@@ -308,6 +307,7 @@ const Checkout = () => {
       "#dbb845": "dorado",
       "#dededc": "plata",
       "#dd0f71": "fuscia",
+      "#00FFFF": "celeste",
     };
 
     return colorMap[colorHex] || colorHex;

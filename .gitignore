@@ -1,0 +1,4 @@
+/back/.env
+/front/.env
+node_modules
+*.pdf

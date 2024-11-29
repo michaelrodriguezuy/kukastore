@@ -72,16 +72,22 @@ const UserOrders = () => {
   const getColorByHex = (colorHex) => {
     
     const colorMap = {
-      "#FF0000" : "rojo",
-      "#0000FF" : "azul",
-       "#00FF00" : "verde",
-      "#FFFF00" : "amarillo",
-      "#FFA500" : "naranja",
-      "#EE82EE"   : "violeta",
-      "#FFC0CB" : "rosa",
-      "#8B4513" : "marrón",
-      "#808080" : "gris",
-    };    
+      "#FF0000": "rojo",
+      "#0000FF": "azul",
+      "#00FF00": "verde",
+      "#FFFF00": "amarillo",
+      "#FFA500": "naranja",
+      "#EE82EE": "violeta",
+      "#FFC0CB": "rosa",
+      "#8B4513": "marrón",
+      "#808080": "gris",
+      "#FFFFFF": "blanco",
+      "#000000": "negro",
+      "#dbb845": "dorado",
+      "#dededc": "plata",
+      "#dd0f71": "fuscia",
+      "#00FFFF": "celeste",
+    };  
     
     return colorMap[colorHex] || colorHex
   }

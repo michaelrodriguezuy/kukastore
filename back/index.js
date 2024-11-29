@@ -106,10 +106,22 @@ app.post('/send-email-register', async (req, res) => {
             to,
             subject,
             html: `
+
+            <div style="text-align: center;">
+      <img 
+        src="https://kukastore.com.uy/images/logo.png" 
+        alt="Kuka Store" 
+        style="width: 150px; height: auto; margin-bottom: 20px;" 
+      />
+    </div>
+
                 <p>BIENVENID@</p>
                 <p></p>
                 <!-- Aca podes poner lo que quieras -->
                 <p>${text}</p>
+<p></p>
+<p></p>
+                <p><a href="https://kukastore.com.uy/">Visita nuestra tienda</a></p>
                 `
         };
 
@@ -125,6 +137,7 @@ app.post('/send-email-register', async (req, res) => {
     });
 });
 
+//aviso al comercio
 app.post('/send-email-checkout', async (req, res) => {
     const { idAplicativo, to, subject, text } = req.body;
 
@@ -139,6 +152,8 @@ app.post('/send-email-checkout', async (req, res) => {
                 <p></p>
                 <!-- Aca podes poner lo que quieras -->
                 <p>${text}</p>
+                <p></p>
+                <p>Fijate en mas detalles desde el panel de control, opcion "Ordenes de compra" e ingresa el codigo.</p>
                 `
         };
 
@@ -164,10 +179,21 @@ app.post('/send-email-checkout-user', async (req, res) => {
             to,
             subject,
             html: `
+            <div style="text-align: center;">
+      <img 
+        src="https://kukastore.com.uy/images/logo.png" 
+        alt="Kuka Store" 
+        style="width: 150px; height: auto; margin-bottom: 20px;" 
+      />
+    </div>
                 <p>Gracias por tu compra</p>
                 <p></p>
                 <!-- Aca podes poner lo que quieras -->
                 <p>${text}</p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p><a href="https://kukastore.com.uy/">Esperamos verte pronto en nuestro sitio</a></p>
                 `
         };
 
@@ -185,12 +211,13 @@ app.post('/send-email-checkout-user', async (req, res) => {
 
 app.post("/create_preference", (req, res) => {
     // "https://indiacueros.vercel.app/checkout"
+    // "https://indiacueros.com.uy/checkout"
     // "http://localhost:5173/checkout",
     let preference = {
         items: req.body.items,
         back_urls: {
-            success: "https://indiacueros.com.uy/checkout",
-            failure: "https://indiacueros.com.uy/checkout",
+            success: "http://localhost:5173/checkout",
+            failure: "http://localhost:5173/checkout",
             pending: ""
         },
         auto_return: "approved",

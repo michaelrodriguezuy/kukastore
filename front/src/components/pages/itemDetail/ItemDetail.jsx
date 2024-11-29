@@ -170,7 +170,8 @@ const ItemDetail = () => {
       negro: "#000000",
       dorado: "#dbb845",
       plata: "#dededc",
-      fuscia: "#dd0f71"
+      fuscia: "#dd0f71",
+      celeste: "#00FFFF",
     };
     colorName = colorName.toLowerCase();
     return colorMap[colorName] || colorName;
