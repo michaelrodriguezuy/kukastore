@@ -1,7 +1,6 @@
-
-account_transport.json
-
 node_modules
-*.pdf
 .env
 .vercel
+account_transport.json
+*.log
+*.pdf
