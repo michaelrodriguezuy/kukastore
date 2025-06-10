@@ -1,20 +1,20 @@
 # Backend
-/back/node_modules
-/back/.env
-/back/.vercel
-/back/account_transport.json
-/back/*.pdf
-/back/serviceAccountKey.json
-/back/logs/
-/back/logs/**/*.log
-/back/*.log
+back/node_modules
+back/.env
+back/.vercel
+back/account_transport.json
+back/*.pdf
+back/serviceAccountKey.json
+back/logs/
+back/logs/**/*.log
+back/*.log
 
 # Frontend
-/front/node_modules
-/front/.env
-/front/.vercel
-/front/*.log
-/front/*.pdf
+front/node_modules
+front/.env
+front/.vercel
+front/*.log
+front/*.pdf
 
 # General
 .vscode
