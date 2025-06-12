@@ -20,6 +20,10 @@ jobs:
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'github-actions@github.com'
 
+      - name: Set Git remote URL with token
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/michaelrodriguezuy/kukastore.git
+
       - name: Get latest tag
         id: get_latest_tag
         run: |
@@ -41,13 +45,12 @@ jobs:
         run: |
           echo "Version generated: ${{ steps.generate_version.outputs.version }}"
 
-      - name: Set Git remote URL with token
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/michaelrodriguezuy/kukastore.git
-
-      - name: Create and push tag
+      - name: Commit and push changes manually (if needed)
         if: steps.generate_version.outputs.version != ''
         run: |
+          git config user.name "GitHub Actions"
+          git config user.email "github-actions@github.com"
+          git pull origin main --ff-only
           git tag -a v${{ steps.generate_version.outputs.version }} -m "Release v${{ steps.generate_version.outputs.version }}"
           git push origin v${{ steps.generate_version.outputs.version }}
 
