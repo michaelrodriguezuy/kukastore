@@ -43,7 +43,7 @@ El E-commerce de Kuka Store esta desarrollado con React y Node.js, implementando
 - 🔍 Búsqueda de productos
 - 📊 Panel de administración
 - 📦 Gestión de inventario, categorización
-- 📝 Sistema de órdenes
+- 📝 Sistema de órdenes, control de vencimientos con avisos
 - 📋 Historial de compras para usuarios registrados
 - 🎯 Carrusel de artículos destacados en la página principal
 - ⚡ Filtros avanzados de búsqueda
