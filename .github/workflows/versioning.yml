@@ -15,51 +15,51 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: |
+          npm install -g conventional-changelog-cli
+
       - name: Configure Git
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'github-actions@github.com'
-
-      - name: Set Git remote URL with token
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/michaelrodriguezuy/kukastore.git
+          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}.git
 
       - name: Get latest tag
-        id: get_latest_tag
+        id: get_tag
         run: |
           latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
           echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
 
-      - name: Generate new version
-        id: generate_version
-        uses: TriPSs/conventional-changelog-action@v3
-        with:
-          github-token: ${{ secrets.GH_TOKEN }}
-          version-file: './front/package.json'
-          skip-version-file: true
-          skip-commit: true
-          skip-tag: true
-          release-count: 0
-
-      - name: Show generated version
+      - name: Bump version (patch) and generate changelog
+        id: bump_version
         run: |
-          echo "Version generated: ${{ steps.generate_version.outputs.version }}"
+          current_version=$(git describe --tags --abbrev=0 2>/dev/null | sed 's/v//g' || echo "0.0.0")
+          IFS='.' read -r major minor patch <<< "$current_version"
+          new_version="$major.$minor.$((patch+1))"
+          echo "New version: $new_version"
+          echo "new_version=$new_version" >> $GITHUB_OUTPUT
 
-      - name: Commit and push changes manually (if needed)
-        if: steps.generate_version.outputs.version != ''
+          # Generate changelog
+          conventional-changelog -p angular -i CHANGELOG.md -s -r 0
+
+      - name: Commit and tag
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "github-actions@github.com"
-          git pull origin main --ff-only
-          git tag -a v${{ steps.generate_version.outputs.version }} -m "Release v${{ steps.generate_version.outputs.version }}"
-          git push origin v${{ steps.generate_version.outputs.version }}
+          git add CHANGELOG.md
+          git commit -m "chore(release): v${{ steps.bump_version.outputs.new_version }} [skip ci]"
+          git tag -a v${{ steps.bump_version.outputs.new_version }} -m "Release v${{ steps.bump_version.outputs.new_version }}"
+          git push origin main --follow-tags
 
       - name: Create GitHub Release
-        if: steps.generate_version.outputs.version != ''
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ steps.generate_version.outputs.version }}
-          name: Release v${{ steps.generate_version.outputs.version }}
-          body: ${{ steps.generate_version.outputs.changelog }}
+          tag_name: v${{ steps.bump_version.outputs.new_version }}
+          name: Release v${{ steps.bump_version.outputs.new_version }}
+          body_path: CHANGELOG.md
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
