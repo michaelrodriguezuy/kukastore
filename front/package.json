@@ -1,5 +1,5 @@
 {
-  "name": "prueba-ecommerce",
+  "name": "ecommerce-kuka-store",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -17,6 +17,7 @@
     "@mui/icons-material": "^5.14.1",
     "@mui/material": "^5.14.11",
     "axios": "^1.4.0",
+    "browser-image-compression": "^2.0.2",
     "canvas-confetti": "^1.6.0",
     "embla-carousel": "^8.0.1",
     "embla-carousel-react": "^8.0.1",

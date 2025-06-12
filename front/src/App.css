@@ -1,0 +1,14 @@
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+}
+
+/* Excepción para la página de inicio */
+.home-container .embla {
+  margin-top: 0;
+} 
