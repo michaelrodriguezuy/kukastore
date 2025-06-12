@@ -1,0 +1,268 @@
+.embla {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.embla__viewport {
+  overflow: hidden;
+  border: none;
+}
+.embla__container {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-bottom: none !important;
+  box-shadow: none !important;
+  background: none;
+}
+.embla__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  border: none;
+}
+.embla__slide__inner {
+  position: relative;
+  display: flex;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 20px 80px;
+  gap: 40px;
+  border: none;
+  border-bottom: none !important;
+}
+.embla__slide__img-container {
+  width: 100%;
+  aspect-ratio: 8 / 1;
+  max-width: 1400px;
+  min-width: 320px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.embla__slide__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 8px;
+  background: #fff;
+  transition: transform 0.3s ease;
+}
+.embla__slide__img-container:hover .embla__slide__img {
+  transform: scale(1.1);
+}
+.embla__slide__content {
+  flex: 0 0 50%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.embla__slide__text {
+  text-align: left;
+}
+.embla__slide__text span {
+  color: #666;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+.embla__slide__text h2 {
+  font-size: 2rem;
+  margin: 10px 0 20px;
+  color: #333;
+}
+.embla__slide__text p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+.embla__slide__button {
+  display: inline-block;
+  background-color: #1e1e1e;
+  color: white;
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.embla__slide__button:hover {
+  background-color: #333;
+}
+.embla__controls {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.embla__button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  pointer-events: auto;
+  z-index: 1;
+}
+.embla__button--prev {
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.embla__button--next {
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.embla__button__svg {
+  width: 16px;
+  height: 16px;
+}
+.embla__dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 20px 0;
+  position: relative;
+  z-index: 2;
+}
+.embla__buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+  align-items: center;
+}
+.embla__button:disabled {
+  color: var(--detail-high-contrast);
+}
+.embla__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.embla__dot--selected {
+  background-color: rgba(0, 0, 0, 0.6);
+  transform: scale(1.2);
+}
+.embla__parallax {
+  border-radius: 1.8rem;
+  height: 100%;
+  overflow: hidden;
+}
+.embla__parallax__layer {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.embla__parallax__img {
+  max-width: none;
+  flex: 0 0 calc(115% + (var(--slide-spacing) * 2));
+  object-fit: cover;
+}
+
+
+/* Eliminar todos los efectos de focus */
+.embla *:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.embla__slide::after {
+  display: none;
+}
+
+/* Asegurar que no haya líneas en ningún elemento */
+.embla *,
+.embla *::before,
+.embla *::after {
+  border-bottom: none !important;
+  box-shadow: none !important;
+  background-image: none !important;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 600px) {
+  .embla__slide__inner {
+    flex-direction: column;
+    padding: 0;
+    gap: 0;
+  }
+
+  .embla__slide__img-container {
+    flex: 1 1 100%;
+  }
+
+  .embla__slide__content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.7);
+    flex: none;
+    width: 100%;
+  }
+
+  .embla__slide__text h2 {
+    font-size: 1.2rem;
+    margin: 5px 0;
+    color: white;
+  }
+
+  .embla__slide__text span,
+  .embla__slide__text p {
+    display: none;
+  }
+
+  .embla__slide__button {
+    width: auto;
+    margin-top: 8px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
+
+  
+}
+
+
+/* Ajustes para pantallas medianas */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .embla__slide__inner {
+    padding: 20px 60px;
+    gap: 20px;
+  }
+
+  .embla__controls {
+    top: 50%;
+  }
+}
+
+/* Eliminamos los ajustes específicos de posición para desktop */
+@media (min-width: 1025px) {
+  .embla__slide__inner {
+    padding: 20px 80px;
+  }
+}

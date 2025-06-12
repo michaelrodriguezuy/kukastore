@@ -1,0 +1,124 @@
+/* Estilos específicos del ProductCard si son necesarios */ 
+
+.product-card {
+  box-shadow: none !important;
+  position: relative;
+  transition: all 1s ease;
+  height: 100%;
+  background-color: transparent;
+  border: none !important;
+  border-radius: 8px;
+}
+
+.product-card:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.product-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: none !important;
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: none !important;
+}
+
+.product-image-wrapper {
+  position: relative;
+  display: inline-block; /* Para contener la imagen y el badge */
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.product-image-container {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 10px;
+  position: relative;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 8px;
+  transition: transform 1.5s ease;
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.1);
+}
+
+.discount-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #d32f2f;
+  color: white;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  z-index: 1;
+  font-size: 0.875rem;
+}
+
+.product-title {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.product-description {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.product-price {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+/* Media queries para responsive */
+@media (max-width: 600px) {
+  .image-container {
+    height: 250px;
+  }
+
+  .discount-badge {
+    width: 40px;
+    height: 40px;
+    font-size: 0.8rem;
+  }
+
+  .product-title {
+    font-size: 0.9rem;
+  }
+
+  .product-description {
+    font-size: 0.8rem;
+  }
+
+  .product-price {
+    font-size: 1rem;
+  }
+} 

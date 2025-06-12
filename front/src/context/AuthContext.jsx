@@ -33,7 +33,7 @@ const AuthContextComponent = ({ children }) => {
     
   };
 
-  const sessionTimeout = 120000; // 120000 -> 2 minutos
+  const sessionTimeout = 300000; // 60000 -> 1 minuto
   let timeoutId;
 
   const resetSessionTimeout = () => {
@@ -47,7 +47,10 @@ const AuthContextComponent = ({ children }) => {
     resetSessionTimeout();
   };
 
+  //solo se resetea el timeout si el usuario esta logeado
   useEffect(() => {
+
+    if (isLogged) {
     document.addEventListener("mousemove", handleActivity);
     document.addEventListener("keydown", handleActivity);
 
@@ -58,7 +61,8 @@ const AuthContextComponent = ({ children }) => {
       document.removeEventListener("mousemove", handleActivity);
       document.removeEventListener("keydown", handleActivity);
     };
-  }, []);
+  }
+  }, [isLogged]);
 
   let data = {
     user,

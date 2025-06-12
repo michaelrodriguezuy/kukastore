@@ -1,0 +1,16 @@
+.item-list-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.filters-container {
+  background-color: rgba(0, 0, 0, 0.03);
+  padding: 10px 0;
+  width: 100%;
+}
+
+.products-grid {
+  padding: 20px;
+  flex: 1;
+} 
