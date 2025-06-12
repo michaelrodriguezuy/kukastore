@@ -41,6 +41,10 @@ jobs:
         run: |
           echo "Version generated: ${{ steps.generate_version.outputs.version }}"
 
+      - name: Set Git remote URL with token
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/michaelrodriguezuy/kukastore.git
+
       - name: Create and push tag
         if: steps.generate_version.outputs.version != ''
         run: |
