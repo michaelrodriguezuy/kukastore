@@ -37,6 +37,10 @@ jobs:
           skip-tag: true
           release-count: 0
 
+      - name: Show generated version
+        run: |
+          echo "Version generated: ${{ steps.generate_version.outputs.version }}"
+
       - name: Create and push tag
         if: steps.generate_version.outputs.version != ''
         run: |
