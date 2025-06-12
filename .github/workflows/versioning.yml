@@ -1,0 +1,54 @@
+name: Versioning
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  versioning:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'github-actions@github.com'
+
+      - name: Get latest tag
+        id: get_latest_tag
+        run: |
+          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
+
+      - name: Generate new version
+        id: generate_version
+        uses: TriPSs/conventional-changelog-action@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version-file: './front/package.json'
+          skip-version-file: true
+          skip-commit: true
+          skip-tag: true
+          release-count: 0
+
+      - name: Create and push tag
+        if: steps.generate_version.outputs.version != ''
+        run: |
+          git tag -a v${{ steps.generate_version.outputs.version }} -m "Release v${{ steps.generate_version.outputs.version }}"
+          git push origin v${{ steps.generate_version.outputs.version }}
+
+      - name: Create GitHub Release
+        if: steps.generate_version.outputs.version != ''
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.generate_version.outputs.version }}
+          name: Release v${{ steps.generate_version.outputs.version }}
+          body: ${{ steps.generate_version.outputs.changelog }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
