@@ -1,4 +1,13 @@
-# [](https://github.com/michaelrodriguezuy/kukastore/compare/v2.0.3...v) (2025-06-13)
+# [](https://github.com/michaelrodriguezuy/kukastore/compare/v2.0.4...v) (2025-06-13)
+
+
+### Bug Fixes
+
+* cambio en versioning 12 ([e1d4d0f](https://github.com/michaelrodriguezuy/kukastore/commit/e1d4d0fc94cf8e28655e84dab65fb39fe204253b))
+
+
+
+## [2.0.4](https://github.com/michaelrodriguezuy/kukastore/compare/v2.0.3...v2.0.4) (2025-06-13)
 
 
 ### Bug Fixes
