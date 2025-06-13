@@ -33,13 +33,13 @@ jobs:
       - name: Get latest tag
         id: get_tag
         run: |
-          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          latest_tag=$(git tag --sort=-creatordate | head -n 1 || echo "v0.0.0")
           echo "latest_tag=$latest_tag" >> $GITHUB_OUTPUT
 
       - name: Bump version (patch) and generate changelog
         id: bump_version
         run: |
-          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          latest_tag="${{ steps.get_tag.outputs.latest_tag }}"
           current_version=$(echo "$latest_tag" | sed 's/^v//')
           IFS='.' read -r major minor patch <<< "$current_version"
           new_version="$major.$minor.$((patch+1))"
