@@ -39,7 +39,8 @@ jobs:
       - name: Bump version (patch) and generate changelog
         id: bump_version
         run: |
-          current_version=$(git describe --tags --abbrev=0 2>/dev/null | sed 's/v//g' || echo "0.0.0")
+          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          current_version=$(echo "$latest_tag" | sed 's/^v//')
           IFS='.' read -r major minor patch <<< "$current_version"
           new_version="$major.$minor.$((patch+1))"
           echo "New version: $new_version"
