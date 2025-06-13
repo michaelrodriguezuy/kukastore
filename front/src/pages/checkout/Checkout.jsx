@@ -1293,7 +1293,7 @@ const Checkout = () => {
                         sx={{ mt: 1, color: "text.secondary" }}
                       >
                         Una vez realizada la transferencia, enviar el
-                        comprobante a mefy29.5@hotmail.com
+                        comprobante al correo mefy29.5@hotmail.com
                       </Typography>
                     </Box>
                   )}
