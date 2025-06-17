@@ -36,6 +36,9 @@ const Register = () => {
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
+  const urlPublicFrontEnv = import.meta.env.VITE_URL_Public_Frontend;
+  const urlPublicBackEnv = import.meta.env.VITE_URL_Public_Backend;
+
   const customBlack = alpha("#000", 0.8);
 
   let initialValues = {
@@ -99,13 +102,10 @@ const Register = () => {
 
   const sendEmail = async (email) => {
     console.log("Enviando correo electrónico a:", email);
-    try {
-      // const response = await axios.post(
-      //   "https://indiacuerosback.vercel.app/send-email-register",
-      //   {
+    try {      
+      const apiUrlBack = urlPublicBackEnv ? `${urlPublicBackEnv}/send-email-register` : "http://localhost:8081/send-email-register";
       const response = await axios.post(
-        // "http://localhost:8081/send-email-register",
-        "https://8rx6nnr9-8081.brs.devtunnels.ms/send-email-register",
+        apiUrlBack,
         {
           to: email,
           subject: "Confirmación de registro en Kuka Store",

@@ -18,6 +18,16 @@ const CompraFinalizada = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const emailNotificationFromEcommerce = import.meta.env.VITE_EMAIL_Notification_From_eCommerce;
+  const emailNotificationComercio = import.meta.env.VITE_EMAIL_Notification_Comercio;
+
+  const banco = import.meta.env.VITE_Banco;
+  const cuenta = import.meta.env.VITE_Banco_Cuenta;
+  const titular = import.meta.env.VITE_Banco_Titular;
+  const horasLiberacionOrden = import.meta.env.VITE_Horas_Liberacion_Ordenes;
+  const direccion = import.meta.env.VITE_Direccion_local;
+  const diasHorarios = import.meta.env.VITE_Dias_horarios;
+
   useEffect(() => {
     // Limpiar localStorage después de 10 segundos
     const timer = setTimeout(() => {
@@ -76,9 +86,9 @@ const CompraFinalizada = () => {
             <Typography variant="subtitle1" gutterBottom>
               Datos bancarios:
             </Typography>
-            <Typography variant="body2">Banco: BROU</Typography>
-            <Typography variant="body2">Cuenta: 000-123456-00001</Typography>
-            <Typography variant="body2">Titular: Pepito el pistolero</Typography>
+            <Typography variant="body2">Banco: {banco}</Typography>
+            <Typography variant="body2">Cuenta: {cuenta}</Typography>
+            <Typography variant="body2">Titular: {titular}</Typography>
             <Typography variant="body2" sx={{ mt: 2, color: 'error.main' }}>
               IMPORTANTE:
             </Typography>
@@ -86,10 +96,10 @@ const CompraFinalizada = () => {
               1. Realice la transferencia al número de cuenta mencionado arriba
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              2. Envíe el comprobante de transferencia a mefy29.5@hotmail.com
+              2. Envíe el comprobante de transferencia a {emailNotificationComercio}
             </Typography>
             <Typography variant="body2" sx={{ mt: 1, color: 'error.main' }}>
-              Si no realiza estos pasos dentro de las próximas 24 horas, 
+              Si no realiza estos pasos dentro de las próximas {horasLiberacionOrden} horas, 
               la compra será cancelada automáticamente y los productos serán liberados.
             </Typography>
           </Box>
@@ -111,17 +121,17 @@ const CompraFinalizada = () => {
               IMPORTANTE:
             </Typography>
             <Typography variant="body2">
-              Debe realizar el pago en efectivo en nuestro local dentro de las próximas 24 horas.
+              Debe realizar el pago en efectivo en nuestro local dentro de las próximas {horasLiberacionOrden} horas.
             </Typography>
             <Typography variant="body2" sx={{ mt: 1, color: 'error.main' }}>
               De no efectuar el pago en el plazo establecido, la compra será cancelada 
               automáticamente y los productos serán liberados.
             </Typography>
             <Typography variant="body2" sx={{ mt: 2 }}>
-              Dirección: Av. Principal 123, Treinta y Tres
+              Dirección: {direccion}
             </Typography>
             <Typography variant="body2">
-              Horario: Lunes a Viernes de 9:00 a 18:00
+              Horario: {diasHorarios}
             </Typography>
           </Box>
           </>

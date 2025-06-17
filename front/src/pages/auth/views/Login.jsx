@@ -26,6 +26,9 @@ import Swal from "sweetalert2";
 
 import { alpha } from "@mui/material/styles";
 
+const urlPublicFrontEnv = import.meta.env.VITE_URL_Public_Frontend;
+  const urlPublicBackEnv = import.meta.env.VITE_URL_Public_Backend;
+
 const Login = () => {
   const { handleLogin } = useContext(AuthContext);
   const rolAdmin = import.meta.env.VITE_ROLADMIN;
@@ -144,6 +147,27 @@ const Login = () => {
       rol: user.rol,
     };
     await setDoc(userRef, newUser);
+    //enviar aviso de registro al cliente
+    sendEmail(user.email);
+  };
+
+  const sendEmail = async (email) => {
+    console.log("Enviando correo electrónico a:", email);
+    try {
+      const apiUrlBack = urlPublicBackEnv ? `${urlPublicBackEnv}/send-email-register` : "http://localhost:8081/send-email-register";
+      const response = await axios.post(
+        apiUrlBack,
+        {
+          to: email,
+          subject: "Confirmación de registro en nombre comercio",
+          text: "Gracias por registrarte en nuestro sitio.",
+        }
+      );
+
+      console.log(response.data.message);
+    } catch (error) {
+      console.error("Error al enviar el correo electrónico:", error);
+    }
   };
 
   const formik = useFormik({

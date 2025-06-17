@@ -101,6 +101,14 @@ const Checkout = () => {
   const [cities, setCities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const urlPublicFrontEnv = import.meta.env.VITE_URL_Public_Frontend;
+  const urlPublicBackEnv = import.meta.env.VITE_URL_Public_Backend; 
+  const emailNotificationFromEcommerce = import.meta.env.VITE_EMAIL_Notification_From_eCommerce;
+  const emailNotificationComercio = import.meta.env.VITE_EMAIL_Notification_Comercio;
+  const banco = import.meta.env.VITE_Banco;
+  const bancoCuenta = import.meta.env.VITE_Banco_Cuenta;
+  const bancoTitular = import.meta.env.VITE_Banco_Titular;
+
   // Obtener datos del pedido del localStorage
   const [orderData] = useState(() => {
     const data = localStorage.getItem("orderData");
@@ -109,6 +117,9 @@ const Checkout = () => {
 
   // Usar el orderData del contexto para el costo de envío
   const { shippingMethod } = orderData;
+
+  // Estado para controlar si los datos de ubicación están cargados
+  const [locationDataLoaded, setLocationDataLoaded] = useState(false);
 
   // Mover la función handlePayment antes de usarla en formik
   const handlePayment = async () => {
@@ -265,10 +276,12 @@ const Checkout = () => {
         }
 
         // Si no hay caché, hacer la llamada a la API
-        //const response = await axios.get("http://localhost:8081/api/countries");
-        const response = await axios.get(
-          "https://8rx6nnr9-8081.brs.devtunnels.ms/api/countries"
-        );
+
+        const apiUrlBack = urlPublicBackEnv
+            ? `${urlPublicBackEnv}/api/countries`
+            : "http://localhost:8081/api/countries";
+
+        const response = await axios.get(apiUrlBack);
         setCountries(response.data);
 
         // Guardar en caché
@@ -300,73 +313,118 @@ const Checkout = () => {
     }
   }, []);
 
-  // Cargar ciudades (states en el backend) cuando se selecciona un país
-  const handleCountryChange = async (event) => {
-    const countryName = event.target.value;
-    const selectedCountry = countries.find(
-      (country) => country.name === countryName
+  // Cargar datos de envío y ubicación al inicio
+  useEffect(() => {
+    const shippingDatas = JSON.parse(
+      localStorage.getItem("shippingData") || "{}"
     );
+    setShippingData(shippingDatas);
 
-    formik.setFieldValue("pais", countryName);
-    formik.setFieldValue("ciudad", "");
-    formik.setFieldValue("localidad", "");
-    formik.setFieldValue("codigoPostal", "");
-
-    setStates([]);
-    setCities([]);
-
-    if (selectedCountry) {
-      try {
-        //si el pais es uruguay, apunto a la API de UES
-        if (selectedCountry.code === "UY") {
-          const response = await axios.get(
-            // "http://localhost:8081/api/ues/locations"
-            "https://8rx6nnr9-8081.brs.devtunnels.ms/api/ues/locations"
-          );
-          setStates(response.data);
-        } else {
-          const response = await axios.get(
-            // `http://localhost:8081/api/states/${selectedCountry.code}`
-            `https://8rx6nnr9-8081.brs.devtunnels.ms/api/states/${selectedCountry.code}`
-          );
-          setStates(response.data);
-        }
-      } catch (error) {
-        console.error("Error al obtener ciudades:", error);
-        setStates(commonStates);
+    // Si hay datos de ubicación, seleccionar Uruguay por defecto
+    if (shippingDatas.departamento || shippingDatas.localidad) {
+      const uruguay = commonCountries.find(country => country.code === "UY");
+      if (uruguay) {
+        formik.setFieldValue("pais", uruguay.name);
+        handleCountryChange(uruguay);
       }
     }
-  };
+  }, []);
 
-  // Cargar localidades (cities en el backend) cuando se selecciona una ciudad
-  const handleStateChange = async (event) => {
-    const cityName = event.target.value;
-    const selectedCountry = countries.find(
-      (country) => country.name === formik.values.pais
-    );
+  // Efecto para cargar departamentos cuando se selecciona Uruguay
+  useEffect(() => {
+    const fetchLocations = async () => {
 
-    formik.setFieldValue("ciudad", cityName);
-    formik.setFieldValue("localidad", "");
+      const apiUrlBack = urlPublicBackEnv
+            ? `${urlPublicBackEnv}/api/ues/locations`
+            : "http://localhost:8081/api/ues/locations";
 
+      try {
+        const response = await axios.get(apiUrlBack);
+        setStates(response.data);
+        
+        // Si hay datos de envío guardados, seleccionar el departamento
+        if (shippingData?.departamento) {
+          const selectedState = response.data.find(
+            state => state.nombre === shippingData.departamento
+          );
+          if (selectedState) {
+            formik.setFieldValue("ciudad", selectedState.nombre);
+            setCities(selectedState.localidades || []);
+            
+            // Si hay localidad guardada, seleccionarla
+            if (shippingData.localidad) {
+              const selectedCity = selectedState.localidades?.find(
+                city => city.nombre === shippingData.localidad
+              );
+              if (selectedCity) {
+                formik.setFieldValue("localidad", selectedCity.nombre);
+                // Actualizar el código postal si existe
+                if (selectedCity.codigo_postal) {
+                  formik.setFieldValue("codigoPostal", selectedCity.codigo_postal);
+                }
+              }
+            }
+          }
+        }
+        setLocationDataLoaded(true);
+      } catch (error) {
+        console.error("Error al cargar las localidades:", error);
+      }
+    };
+
+    if (formik.values.pais === "Uruguay") {
+      fetchLocations();
+    }
+  }, [formik.values.pais, shippingData]);
+
+  // Modificar handleCountryChange para manejar la selección de Uruguay
+  const handleCountryChange = async (selectedCountry) => {
     if (selectedCountry) {
       try {
         //si el pais es uruguay, apunto a la API de UES
         ///api/ues/locations
+
+        const apiUrlBack = urlPublicBackEnv
+            ? `${urlPublicBackEnv}/api/ues/locations`
+            : "http://localhost:8081/api/ues/locations";
+
         if (selectedCountry.code === "UY") {
-          const selectedState = states.find(
-            (state) => state.nombre === cityName
-          );
-          if (selectedState) {
-            setCities(selectedState.localidades || []);
-            console.log(response.data);
+          const response = await axios.get(apiUrlBack);
+          setStates(response.data);
+          
+          // Si hay datos de envío guardados, seleccionar el departamento
+          if (shippingData?.departamento) {
+            const selectedState = response.data.find(
+              state => state.nombre === shippingData.departamento
+            );
+            if (selectedState) {
+              formik.setFieldValue("ciudad", selectedState.nombre);
+              setCities(selectedState.localidades || []);
+              
+              // Si hay localidad guardada, seleccionarla
+              if (shippingData.localidad) {
+                const selectedCity = selectedState.localidades?.find(
+                  city => city.nombre === shippingData.localidad
+                );
+                if (selectedCity) {
+                  formik.setFieldValue("localidad", selectedCity.nombre);
+                  // Actualizar el código postal si existe
+                  if (selectedCity.codigo_postal) {
+                    formik.setFieldValue("codigoPostal", selectedCity.codigo_postal);
+                  }
+                }
+              }
+            }
           }
         } else {
           const selectedState = states.find((state) => state.name === cityName);
           if (selectedState) {
-            const response = await axios.get(
-              // `http://localhost:8081/api/cities/${selectedCountry.code}/${selectedState.iso2}`
-              `https://8rx6nnr9-8081.brs.devtunnels.ms/api/cities/${selectedCountry.code}/${selectedState.iso2}`
-            );
+
+            const apiUrlBack = urlPublicBackEnv
+            ? `${urlPublicBackEnv}/api/cities/${selectedCountry.code}/${selectedState.iso2}`
+            : `http://localhost:8081/api/cities/${selectedCountry.code}/${selectedState.iso2}`;
+
+            const response = await axios.get(apiUrlBack);
             setCities(response.data);
           }
         }
@@ -399,15 +457,6 @@ const Checkout = () => {
     }
     return item.unit_price;
   };
-
-  useEffect(() => {
-    // Consolidar datos de shippingData en orderData
-    const shippingDatas = JSON.parse(
-      localStorage.getItem("shippingData") || "{}"
-    );
-    setShippingData(shippingDatas);
-  }, []);
-
 
   // Cuando se selecciona el método de pago
   const handlePaymentMethodChange = (event) => {
@@ -733,15 +782,16 @@ const Checkout = () => {
 
       // Enviar emails
       try {
-        //await axios.post("http://localhost:8081/send-email-checkout", {
-        await axios.post(
-          "https://8rx6nnr9-8081.brs.devtunnels.ms/send-email-checkout",
-          {
-            to: "kukastore.tyt@gmail.com",
-            subject: "Nueva venta realizada",
-            order: {
-              orderId: orderRef.id,
-              ...orderDataFromStorage.customerData,
+        const apiUrlBack = urlPublicBackEnv
+            ? `${urlPublicBackEnv}/send-email-checkout`
+            : `http://localhost:8081/send-email-checkout`;
+
+        await axios.post(apiUrlBack, {
+          to: emailNotificationComercio,
+          subject: "Nueva venta realizada",
+          order: {
+            orderId: orderRef.id,
+            ...orderDataFromStorage.customerData,
               total: finalTotal, //getTotalWithShipment(),
               paymentMethod: orderDataFromStorage.paymentMethod,
               estadoCompra: estadoCompraFinal,
@@ -749,17 +799,17 @@ const Checkout = () => {
           }
         );
 
-        // Enviar email al cliente
-        //await axios.post("http://localhost:8081/send-email-checkout-user", {
-        await axios.post(
-          "https://8rx6nnr9-8081.brs.devtunnels.ms/send-email-checkout-user",
-          {
-            to: orderDataFromStorage.customerData.email,
-            subject: "Confirmación de compra - Kuka Store",
-            customerName: `${orderDataFromStorage.customerData.nombre} ${orderDataFromStorage.customerData.apellido}`,
-            orderId: orderRef.id,
-            orderDetails: {
-              items: itemsToUse.map((item) => ({
+        const apiUrlBackUser = urlPublicBackEnv
+            ? `${urlPublicBackEnv}/send-email-checkout-user`
+            : `http://localhost:8081/send-email-checkout-user`;
+
+        await axios.post(apiUrlBackUser, {
+          to: orderDataFromStorage.customerData.email,
+          subject: "Confirmación de compra - Kuka Store",
+          customerName: `${orderDataFromStorage.customerData.nombre} ${orderDataFromStorage.customerData.apellido}`,
+          orderId: orderRef.id,
+          orderDetails: {
+            items: itemsToUse.map((item) => ({
                 ...item,
                 price: item.unit_price,
                 priceWithDiscount: item.discount
@@ -863,11 +913,14 @@ const Checkout = () => {
     });
 
     console.log("Enviando orden al server...");
+
+    const apiUrlBackUser = urlPublicBackEnv
+            ? `${urlPublicBackEnv}/create_preference`
+            : `http://localhost:8081/create_preference`;
+
     try {
       let response = await axios.post(
-        // "http://localhost:8081/create_preference",
-        "https://8rx6nnr9-8081.brs.devtunnels.ms/create_preference",
-        // "https://indiacuerosback.vercel.app/create_preference",
+        apiUrlBackUser,
         {
           items: items,
           shipment_cost: parseFloat(orderData.shippingCost || 0),
@@ -967,106 +1020,96 @@ const Checkout = () => {
               />
 
               {/* Resto de campos en columna */}
-              <TextField
-                size="small"
-                fullWidth
-                select
-                label="País"
-                name="pais"
-                value={formik.values.pais}
-                onChange={handleCountryChange}
-                error={formik.touched.pais && Boolean(formik.errors.pais)}
-                helperText={formik.touched.pais && formik.errors.pais}
-                sx={{ mb: 2 }}
-                disabled={isLoading}
-              >
-                {countries.map((country) => (
-                  <MenuItem key={country.code} value={country.name}>
-                    {country.name}
-                  </MenuItem>
-                ))}
-              </TextField>
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <InputLabel>País</InputLabel>
+                <Select
+                  value={formik.values.pais}
+                  onChange={(e) => {
+                    const countryName = e.target.value;
+                    const selectedCountry = countries.find(
+                      (country) => country.name === countryName
+                    );
+                    formik.setFieldValue("pais", countryName);
+                    formik.setFieldValue("ciudad", "");
+                    formik.setFieldValue("localidad", "");
+                    formik.setFieldValue("codigoPostal", "");
+                    setStates([]);
+                    setCities([]);
+                    if (selectedCountry) {
+                      handleCountryChange(selectedCountry);
+                    }
+                  }}
+                  label="País"
+                >
+                  {countries.map((country) => (
+                    <MenuItem key={country.code} value={country.name}>
+                      {country.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
-              <TextField
-                size="small"
-                fullWidth
-                select
-                label="Ciudad"
-                name="ciudad"
-                value={formik.values.ciudad}
-                onChange={handleStateChange}
-                error={formik.touched.ciudad && Boolean(formik.errors.ciudad)}
-                helperText={formik.touched.ciudad && formik.errors.ciudad}
-                disabled={!formik.values.pais}
-                sx={{ mb: 2 }}
-              >
-                {states.map((state) => {
-                  //si el pais es uruguay, uso ID y nombre, sino uso iso2 y name
-                  const isUruguay =
-                    countries.find(
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <InputLabel>Ciudad</InputLabel>
+                <Select
+                  value={formik.values.ciudad}
+                  onChange={(e) => {
+                    const cityName = e.target.value;
+                    const selectedCountry = countries.find(
                       (country) => country.name === formik.values.pais
-                    )?.code === "UY";
-                  return isUruguay ? (
+                    );
+                    formik.setFieldValue("ciudad", cityName);
+                    formik.setFieldValue("localidad", "");
+                    if (selectedCountry) {
+                      const selectedState = states.find(
+                        (state) => state.nombre === cityName
+                      );
+                      if (selectedState) {
+                        setCities(selectedState.localidades || []);
+                      }
+                    }
+                  }}
+                  label="Ciudad"
+                  disabled={!formik.values.pais || !locationDataLoaded}
+                >
+                  {states.map((state) => (
                     <MenuItem key={state.id} value={state.nombre}>
                       {state.nombre}
                     </MenuItem>
-                  ) : (
-                    <MenuItem key={state.iso2} value={state.name}>
-                      {state.name}
-                    </MenuItem>
-                  );
-                })}
-              </TextField>
+                  ))}
+                </Select>
+                {!locationDataLoaded && formik.values.pais === "Uruguay" && (
+                  <FormHelperText>Cargando departamentos...</FormHelperText>
+                )}
+              </FormControl>
 
-              <TextField
-                size="small"
-                fullWidth
-                select
-                label="Localidad"
-                name="localidad"
-                value={formik.values.localidad}
-                onChange={(event) => {
-                  formik.handleChange(event);
-                  const isUruguay =
-                    countries.find(
-                      (country) => country.name === formik.values.pais
-                    )?.code === "UY";
-                  if (isUruguay) {
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <InputLabel>Localidad</InputLabel>
+                <Select
+                  value={formik.values.localidad}
+                  onChange={(e) => {
+                    formik.setFieldValue("localidad", e.target.value);
+                    // Actualizar el código postal cuando se selecciona una localidad
                     const selectedCity = cities.find(
-                      (city) => city.nombre === event.target.value
+                      city => city.nombre === e.target.value
                     );
-                    if (selectedCity && selectedCity.codigoPostal) {
-                      formik.setFieldValue(
-                        "codigoPostal",
-                        selectedCity.codigoPostal
-                      );
+                    if (selectedCity && selectedCity.codigo_postal) {
+                      formik.setFieldValue("codigoPostal", selectedCity.codigo_postal);
                     }
-                  }
-                }}
-                error={
-                  formik.touched.localidad && Boolean(formik.errors.localidad)
-                }
-                helperText={formik.touched.localidad && formik.errors.localidad}
-                disabled={!formik.values.ciudad}
-                sx={{ mb: 2 }}
-              >
-                {cities.map((city) => {
-                  //si el pais es uruguay, uso ID y nombre, sino uso iso2 y name
-                  const isUruguay =
-                    countries.find(
-                      (country) => country.name === formik.values.pais
-                    )?.code === "UY";
-                  return isUruguay ? (
+                  }}
+                  label="Localidad"
+                  disabled={!formik.values.ciudad || cities.length === 0}
+                >
+                  {cities.map((city) => (
                     <MenuItem key={city.id} value={city.nombre}>
                       {city.nombre}
                     </MenuItem>
-                  ) : (
-                    <MenuItem key={city.iso2} value={city.name}>
-                      {city.name}
-                    </MenuItem>
-                  );
-                })}
-              </TextField>
+                  ))}
+                </Select>
+                {formik.values.ciudad && cities.length === 0 && (
+                  <FormHelperText>Cargando localidades...</FormHelperText>
+                )}
+              </FormControl>
 
               <TextField
                 size="small"
@@ -1281,19 +1324,19 @@ const Checkout = () => {
                       <Typography variant="subtitle2" sx={{ mb: 1 }}>
                         Datos bancarios:
                       </Typography>
-                      <Typography variant="body2">Banco: BROU</Typography>
+                      <Typography variant="body2">Banco: {banco}</Typography>
                       <Typography variant="body2">
-                        Cuenta: 000-123456-00001
+                        Cuenta: {bancoCuenta}
                       </Typography>
                       <Typography variant="body2">
-                        Titular: Pepito el pistolero
+                        Titular: {bancoTitular}
                       </Typography>
                       <Typography
                         variant="body2"
                         sx={{ mt: 1, color: "text.secondary" }}
                       >
                         Una vez realizada la transferencia, enviar el
-                        comprobante al correo mefy29.5@hotmail.com
+                        comprobante a {emailNotificationComercio}
                       </Typography>
                     </Box>
                   )}

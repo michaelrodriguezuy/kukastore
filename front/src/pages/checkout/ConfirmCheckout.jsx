@@ -45,6 +45,12 @@ const ConfirmCheckout = () => {
 
   const [isProcessing, setIsProcessing] = useState(false);
 
+  const urlPublicFrontEnv = import.meta.env.VITE_URL_Public_Frontend;
+  const urlPublicBackEnv = import.meta.env.VITE_URL_Public_Backend;
+
+  const emailNotificationFromEcommerce = import.meta.env.VITE_EMAIL_Notification_From_eCommerce;
+  const emailNotificationComercio = import.meta.env.VITE_EMAIL_Notification_Comercio;
+
   // Inicializar MercadoPago
   useEffect(() => {
     if (orderData?.paymentMethod === 'mercadopago') {
@@ -77,8 +83,11 @@ const ConfirmCheckout = () => {
     try {
       const customerName = `${orderToSave.customerData.nombre} ${orderToSave.customerData.apellido}`;
       
-      // await axios.post('http://localhost:8081/send-email-checkout-user', {
-      await axios.post('https://8rx6nnr9-8081.brs.devtunnels.ms/send-email-checkout-user', {
+      const apiUrlBack = urlPublicBackEnv
+            ? `${urlPublicBackEnv}/send-email-checkout-user`
+            : "http://localhost:8081/send-email-checkout-user";
+
+      await axios.post(apiUrlBack, {
         to: orderToSave.customerData.email,
         subject: 'Confirmación de pedido',
         customerName: customerName,
@@ -115,9 +124,13 @@ const ConfirmCheckout = () => {
 
   const sendEmailToCommerce = async (orderId, orderToSave) => {
     try {
-      // await axios.post('http://localhost:8081/send-email-checkout', {
-      await axios.post('https://8rx6nnr9-8081.brs.devtunnels.ms/send-email-checkout', {
-        to: "kukastore.tyt@gmail.com",
+
+      const apiUrlBack = urlPublicBackEnv
+            ? `${urlPublicBackEnv}/send-email-checkout`
+            : "http://localhost:8081/send-email-checkout";
+
+      await axios.post(apiUrlBack, {
+        to: emailNotificationComercio,
         subject: "Nueva venta - ID: " + orderId,
         text: "Datos de una venta en su e-Commerce",
         order: {

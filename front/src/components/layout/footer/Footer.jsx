@@ -10,6 +10,7 @@ import {
   Snackbar,
   Alert,
   IconButton,
+  Tooltip,
 } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { alpha } from "@mui/material/styles";
@@ -43,7 +44,7 @@ const Footer = () => {
         email: email,
         createdAt: new Date(),
       });
-      
+
       setEmail("");
       setSnackbarMessage("¡Gracias por suscribirte!");
       setSnackbarSeverity("success");
@@ -60,7 +61,7 @@ const Footer = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        width: "100%"
+        width: "100%",
       }}
     >
       {/* Footer */}
@@ -82,8 +83,8 @@ const Footer = () => {
             maxWidth: "100%",
             margin: "0 auto",
             flexWrap: "wrap",
-            justifyContent: "space-evenly",  
-            px: 2,          
+            justifyContent: "space-evenly",
+            px: 2,
           }}
         >
           {/* Sección Logo y Dirección */}
@@ -96,6 +97,27 @@ const Footer = () => {
               <br />
               Treinta y Tres, URUGUAY
             </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 1,
+                justifyContent: "flex-start",
+                alignItems: "flex-start", // Alinea verticalmente al inicio
+                mt: 2, // espacio arriba
+                pl: 0, // padding a la izquierda
+              }}
+            >
+              <IconButton
+                href="https://www.instagram.com/kuka_uy/"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{ color: "white", p: 0 }} // sin padding interno en el botón
+              >
+                <Tooltip title="Contactanos por instagram">
+                  <InstagramIcon fontSize="medium" />
+                </Tooltip>
+              </IconButton>
+            </Box>
           </Grid>
 
           {/* Links */}
@@ -239,10 +261,10 @@ const Footer = () => {
         autoHideDuration={6000}
         onClose={() => setOpenSnackbar(false)}
       >
-        <Alert 
-          onClose={() => setOpenSnackbar(false)} 
+        <Alert
+          onClose={() => setOpenSnackbar(false)}
           severity={snackbarSeverity}
-          sx={{ width: '100%' }}
+          sx={{ width: "100%" }}
         >
           {snackbarMessage}
         </Alert>

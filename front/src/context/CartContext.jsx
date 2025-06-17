@@ -53,8 +53,7 @@ const CartContextComponent = ({ children }) => {
   };
 
   const clearCart = () => {
-    setCart([]);
-    localStorage.removeItem("cart");
+    clearAll();
   };
 
   const clearAll = () => {
@@ -73,6 +72,7 @@ const CartContextComponent = ({ children }) => {
     });
     localStorage.removeItem("cart");
     localStorage.removeItem("orderData");
+    localStorage.removeItem("shippingData");
   };
   
   const deleteById = (sku) => {

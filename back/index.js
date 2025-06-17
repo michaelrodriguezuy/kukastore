@@ -27,6 +27,20 @@ const UES_TOKEN = process.env.UES_TOKEN;
 const UES_USER = process.env.UES_USER;
 const UES_PASSWORD = process.env.UES_PASSWORD;
 
+const urlPublicFrontEnv = process.env.URL_Public_Frontend;
+const urlPublicBackEnv = process.env.URL_Public_Backend;
+
+const emailNotificationFromEcommerce = process.env.EMAIL_Notification_From_eCommerce;
+const emailNotificationComercio = process.env.EMAIL_Notification_Comercio;
+
+const banco = process.env.Banco;
+const bancoCuenta = process.env.Banco_Cuenta;
+const bancoTitular = process.env.Banco_Titular;
+const direccionLocal = process.env.Direccion_local;
+const diasHorarios = process.env.Dias_horarios;
+const horasLiberacionCompras = process.env.Horas_Liberacion_Ordenes;
+
+
 // Inicializar Firebase Admin
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount)
@@ -40,24 +54,31 @@ app.use(express.json());
 
 // Configuración de CORS solo para pruebas
 app.use((req, res, next) => {
-    const allowedOrigins = [
-        'http://localhost:5173',
-        'https://8rx6nnr9-5173.brs.devtunnels.ms'
-    ];
 
-    const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-        res.header('Access-Control-Allow-Origin', origin);
-    }
+  console.log('Middleware CORS ejecutado para:', req.method, req.url);
 
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    res.header('Access-Control-Allow-Credentials', 'true');
 
-    if (req.method === 'OPTIONS') {
-        return res.status(204).end();
-    }
-    next();
+  const allowedOrigins = [    
+    urlPublicFrontEnv || 'http://localhost:5173',
+  ].filter(Boolean);
+
+  const origin = req.headers.origin;
+
+  console.log('Origen de la solicitud:', origin);
+  console.log('Orígenes permitidos:', allowedOrigins);
+
+  if (allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+  }
+
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header('Access-Control-Allow-Credentials', 'true');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+  next();
 });
 
 // Configuración del transporter usando contraseña de aplicación desde .env
@@ -82,7 +103,7 @@ transporter.verify(function (error, success) {
 const sendMail = async (to, subject, html) => {
     try {
         await transporter.sendMail({
-            from: 'kukastore <kukastore.tyt@gmail.com>',
+            from: `kukastore <${emailNotificationFromEcommerce}>`, // Cambiar a la dirección de envío
             to,
             subject,
             html
@@ -236,7 +257,7 @@ app.post('/send-email-register', async (req, res) => {
     <p>BIENVENID@</p>
     <p>${text}</p>
    
-    <p><a href="https://8rx6nnr9-5173.brs.devtunnels.ms/">Visita nuestra tienda</a></p>
+    <p><a href="${urlPublicFrontEnv || 'http://localhost:5173'}">Visita nuestra tienda</a></p>
 
     `);
     res.json({ message: 'Email enviado con éxito' });
@@ -252,9 +273,9 @@ app.post('/send-email-despachado', async (req, res) => {
     <h2>¡Tu pedido ha sido despachado!</h2>
     <p>Tu número de orden es: ${orderId}</p>
     <p>Gracias por tu compra.</p>
-    
-    <p>¡Que disfrutes tu producto!</p>        
-    <p>Si tienes alguna pregunta, no dudes en <a href="https://8rx6nnr9-5173.brs.devtunnels.ms/contact">contactarnos</a>.</p>
+
+    <p>¡Que disfrutes tu producto!</p>
+    <p>Si tienes alguna pregunta, no dudes en <a href="${urlPublicFrontEnv || 'http://localhost:5173'}/contact">contactarnos</a>.</p>
     `);
   res.json({ message: 'Email de aviso de despachado enviado con éxito' });
 });
@@ -282,7 +303,7 @@ app.post('/send-email-checkout', async (req, res) => {
 
      <div style="background-color: #1e1e1e; padding: 15px; text-align: center; border-radius: 5px; margin: 20px 0;">
         
-        <a href="https://8rx6nnr9-5173.brs.devtunnels.ms/login" 
+        <a href="${urlPublicFrontEnv || 'http://localhost:5173'}/login" 
            style="color: white; text-decoration: none; display: block;">
           Acceder al panel de control
         </a>
@@ -306,21 +327,21 @@ app.post('/send-email-checkout-user', async (req, res) => {
         return `
             <div style="margin-top: 20px; padding: 15px; background-color: #fff3cd; border-radius: 5px; border: 1px solid #ffeeba;">
               <h4 style="color: #856404; margin-top: 0;">Datos bancarios para la transferencia:</h4>
-              <p style="margin: 5px 0;">Banco: BROU</p>
-              <p style="margin: 5px 0;">Cuenta: 000-123456-00001</p>
-              <p style="margin: 5px 0;">Titular: Pepito el pistolero</p>
-              
+              <p style="margin: 5px 0;">Banco: ${banco}</p>
+              <p style="margin: 5px 0;">Cuenta: ${bancoCuenta}</p>
+              <p style="margin: 5px 0;">Titular: ${bancoTitular}</p>
+
               <div style="margin-top: 15px;">
                 <p style="color: #dc3545; font-weight: bold;">IMPORTANTE:</p>
                 <p>1. Realice la transferencia al número de cuenta mencionado arriba</p>
-                <p>2. Envíe el comprobante de transferencia a mefy29.5@hotmail.com</p>
+                <p>2. Envíe el comprobante de transferencia a ${emailNotificationComercio}</p>
 
                 <div style="margin-top: 15px; padding: 10px; background-color: #f8f9fa; border-radius: 5px;">
-                  <p style="margin: 5px 0;"><strong>Dirección:</strong> Santiago Gadea 1063, Treinta y Tres</p>
-                  <p style="margin: 5px 0;"><strong>Horario:</strong> de 10 a 12, y de 15 a 18:30</p>
+                  <p style="margin: 5px 0;"><strong>Dirección:</strong> ${direccionLocal}</p>
+                  <p style="margin: 5px 0;"><strong>Horario:</strong> ${diasHorarios}</p>
                 </div>
 
-                <p style="color: #dc3545;">Si no realiza estos pasos dentro de las próximas 24 horas, 
+                <p style="color: #dc3545;">Si no realiza estos pasos dentro de las próximas ${horasLiberacionCompras} horas, 
                 la compra será cancelada automáticamente y los productos serán liberados.</p>
               </div>
             </div>
@@ -329,16 +350,16 @@ app.post('/send-email-checkout-user', async (req, res) => {
         return `
             <div style="margin-top: 20px; padding: 15px; background-color: #fff3cd; border-radius: 5px; border: 1px solid #ffeeba;">
               <h4 style="color: #856404; margin-top: 0;">Instrucciones para el pago en efectivo:</h4>
-              <p>Debe realizar el pago en nuestro local dentro de las próximas 24 horas.</p>
-              
+              <p>Debe realizar el pago en nuestro local dentro de las próximas ${horasLiberacionCompras} horas.</p>
+
               <div style="margin-top: 15px;">
                 <p style="color: #dc3545; font-weight: bold;">IMPORTANTE:</p>
                 <p>De no efectuar el pago en el plazo establecido, la compra será cancelada 
                 automáticamente y los productos serán liberados.</p>
                 
                 <div style="margin-top: 15px; padding: 10px; background-color: #f8f9fa; border-radius: 5px;">
-                  <p style="margin: 5px 0;"><strong>Dirección:</strong> Santiago Gadea 1063, Treinta y Tres</p>
-                  <p style="margin: 5px 0;"><strong>Horario:</strong> de 10 a 12, y de 15 a 18:30</p>
+                  <p style="margin: 5px 0;"><strong>Dirección:</strong> ${direccionLocal}</p>
+                  <p style="margin: 5px 0;"><strong>Horario:</strong> ${diasHorarios}</p>
                 </div>
               </div>
             </div>
@@ -430,7 +451,7 @@ app.post('/send-email-checkout-user', async (req, res) => {
 
     <p style="margin-top: 20px;">
       
-      <a href="https://8rx6nnr9-5173.brs.devtunnels.ms/" style="color: #007bff; text-decoration: none;">Visita nuestra tienda</a>
+      <a href="${urlPublicFrontEnv || 'http://localhost:5173'}" style="color: #007bff; text-decoration: none;">Visita nuestra tienda</a>
     </p>
     `;
 
@@ -438,15 +459,12 @@ app.post('/send-email-checkout-user', async (req, res) => {
   res.json({ message: 'Email enviado con éxito' });
 });
 
-app.post("/create_preference", (req, res) => {
-    // "https://indiacueros.vercel.app/checkout"
-    // "https://indiacueros.com.uy/checkout"
-    // "http://localhost:5173/checkout",
+app.post("/create_preference", (req, res) => {    
     let preference = {
         items: req.body.items,
         back_urls: {
-            success: "http://localhost:5173/checkout",
-            failure: "http://localhost:5173/checkout",
+            success: `${urlPublicFrontEnv || 'http://localhost:5173'}/checkout`,
+            failure: `${urlPublicFrontEnv || 'http://localhost:5173'}/checkout`,
             pending: ""
         },
         auto_return: "approved",
@@ -609,7 +627,7 @@ const checkExpiredOrders = async () => {
           estadoCompra: 'Cancelado',
           fechaCancelacion: admin.firestore.FieldValue.serverTimestamp(),
           fechaActualizacion: admin.firestore.FieldValue.serverTimestamp(),
-          motivoCancelacion: 'Pago no realizado dentro de las 24 horas'
+          motivoCancelacion: `Pago no realizado dentro de las ${horasLiberacionCompras} horas`
         });
 
         // Enviar email de cancelación
@@ -623,7 +641,7 @@ const checkExpiredOrders = async () => {
               </div>
               <h2>Orden Cancelada</h2>
               <p>Estimado/a ${orderData.customerData.nombre},</p>
-              <p>Su orden #${doc.id} ha sido cancelada automáticamente debido a que no se recibió el pago dentro del plazo establecido de 24 horas.</p>
+              <p>Su orden #${doc.id} ha sido cancelada automáticamente debido a que no se recibió el pago dentro del plazo establecido de ${horasLiberacionCompras} horas.</p>
               <p>Los productos han sido liberados.</p>
               <p>Si aún desea realizar la compra, por favor realice un nuevo pedido.</p>
               <p>Gracias por su comprensión.</p>
@@ -661,9 +679,8 @@ cron.schedule('0 9 * * 1', async () => {
   try {
     console.log('Iniciando envío programado de newsletter');
     await writeToLog('Iniciando envío programado de newsletter');
-
-    //const response = await axios.post('http://localhost:8081/send-weekly-newsletter');
-    const response = await axios.post('https://8rx6nnr9-8081.brs.devtunnels.ms/send-weekly-newsletter');
+    
+    const response = await axios.post(`${urlPublicBackEnv || 'http://localhost:8081'}/send-weekly-newsletter`);
 
     await writeToLog(`Newsletter enviado: ${response.data.success} exitosos, ${response.data.errors} errores`);
     console.log('Newsletter enviado exitosamente');
@@ -717,8 +734,7 @@ app.get('/unsubscribe', async (req, res) => {
                             <h1>Te has desuscrito exitosamente</h1>
                             <p>Ya no recibirás más newsletters de Kuka Store.</p>
                             <p>Si deseas volver a suscribirte, puedes hacerlo desde nuestra web.</p>
-                            
-                            <p><a href="https://8rx6nnr9-5173.brs.devtunnels.ms/">Volver a la tienda</a></p>
+                            <p><a href="${urlPublicFrontEnv || 'http://localhost:5173'}">Volver a la tienda</a></p>
                         </div>
                     </body>
                 </html>
@@ -764,7 +780,7 @@ const generateNewsletterHTML = (products, email) => {
                         <p>${product.description || ''}</p>
                         <p style="font-size: 20px; font-weight: bold;">Precio: $${product.unit_price}</p>
                         
-                        <a href="https://8rx6nnr9-5173.brs.devtunnels.ms/itemDetail/${product.id}" 
+                        <a href="${urlPublicFrontEnv || 'http://localhost:5173'}/itemDetail/${product.id}" 
                            style="background-color: #1e1e1e; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">
                             Ver producto
                         </a>
@@ -774,13 +790,12 @@ const generateNewsletterHTML = (products, email) => {
                 <!-- Footer -->
                 <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
                     
-                    <a href="https://8rx6nnr9-5173.brs.devtunnels.ms/" style="color: #1e1e1e; text-decoration: none;">
+                    <a href="${urlPublicFrontEnv || 'http://localhost:5173'}" style="color: #1e1e1e; text-decoration: none;">
                         Visita nuestra tienda
                     </a>
                     <p style="color: #666; font-size: 12px; margin-top: 20px;">
-                        Si no deseas recibir más correos como este, puedes 
-                        
-                        <a href="https://8rx6nnr9-8081.brs.devtunnels.ms/unsubscribe?token=${unsubscribeToken}" style="color: #1e1e1e;">
+                        Si no deseas recibir más correos como este, puedes
+                        <a href="${urlPublicBackEnv || 'http://localhost:8081'}/unsubscribe?token=${unsubscribeToken}" style="color: #1e1e1e;">
                             darte de baja aquí
                         </a>
                     </p>
@@ -797,7 +812,7 @@ app.post('/send-email-contact', async (req, res) => {
 
   try {
     await sendMail(
-      process.env.EMAIL_USER, // email destino (correo cliente de micha)
+      emailNotificationComercio, // email destino (correo cliente de micha)
       'Nuevo mensaje de contacto',
       `
             <div style="text-align: center;">
@@ -824,7 +839,7 @@ app.post('/send-email-contact', async (req, res) => {
             <p>Este es una copia de tu mensaje:</p>
             <p>${message}</p>
            
-            <p><a href="https://8rx6nnr9-5173.brs.devtunnels.ms/">Visita nuestra tienda</a></p>
+            <p><a href="${urlPublicFrontEnv || 'http://localhost:5173'}">Visita nuestra tienda</a></p>
             `
     );
 

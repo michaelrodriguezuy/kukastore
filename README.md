@@ -37,16 +37,16 @@ El E-commerce de Kuka Store esta desarrollado con React y Node.js, implementando
 - 🛒 Carrito de compras
 - 💳 Integración con MercadoPago
 - 📦 Integración con envío de paquetería UES
-- 📧 Notificaciones por correo
+- 📧 Notificaciones via email
 - 📨 Sistema de newsletter
 - 📱 Diseño responsive
 - 🔍 Búsqueda de productos
 - 📊 Panel de administración
 - 📦 Gestión de inventario, categorización
-- 📝 Sistema de órdenes, control de vencimientos con avisos
+- 📝 Sistema de órdenes, control automatizado de vencimientos con avisos
 - 📋 Historial de compras para usuarios registrados
 - 🎯 Carrusel de artículos destacados en la página principal
-- ⚡ Filtros avanzados de búsqueda
+- ⚡ Filtros de búsqueda
 
 
 ## 👥 Autores
