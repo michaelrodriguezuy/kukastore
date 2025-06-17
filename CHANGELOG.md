@@ -1,4 +1,13 @@
-# [](https://github.com/michaelrodriguezuy/kukastore/compare/v2.0.5...v) (2025-06-17)
+# [](https://github.com/michaelrodriguezuy/kukastore/compare/v2.0.6...v) (2025-06-17)
+
+
+### Features
+
+* adaptacion de textos al negocio y uso de nuevas variables de entorno ([261dac5](https://github.com/michaelrodriguezuy/kukastore/commit/261dac57cd10215d9bae108f123b7c429e38bf0f))
+
+
+
+## [2.0.6](https://github.com/michaelrodriguezuy/kukastore/compare/v2.0.5...v2.0.6) (2025-06-17)
 
 
 ### Features
