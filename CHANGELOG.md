@@ -1,4 +1,13 @@
-# [](https://github.com/michaelrodriguezuy/kukastore/compare/v2.0.6...v) (2025-06-17)
+# [](https://github.com/michaelrodriguezuy/kukastore/compare/v2.0.7...v) (2025-06-17)
+
+
+### Features
+
+* chequeo de ordenes vencidas teniendo en cuenta solamente dias habiles ([287d8ab](https://github.com/michaelrodriguezuy/kukastore/commit/287d8abbd30975abbf8f9696f7be78e6c33c006f))
+
+
+
+## [2.0.7](https://github.com/michaelrodriguezuy/kukastore/compare/v2.0.6...v2.0.7) (2025-06-17)
 
 
 ### Features
