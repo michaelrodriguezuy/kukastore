@@ -28,8 +28,10 @@ const Contact = () => {
 
   const urlPublicFrontEnv = import.meta.env.VITE_URL_Public_Frontend;
   const urlPublicBackEnv = import.meta.env.VITE_URL_Public_Backend;
-  const direccion = import.meta.env.VITE_Direccion_local;
-  const horario = import.meta.env.VITE_Dias_horarios;
+  const direccion_1 = import.meta.env.VITE_Direccion_local_1;
+  const direccion_2 = import.meta.env.VITE_Direccion_local_2;
+  const horario_1 = import.meta.env.VITE_Dias_horarios_1 + " - " + import.meta.env.VITE_Dias_horarios_1_;
+  const horario_2 = import.meta.env.VITE_Dias_horarios_2 + " - " + import.meta.env.VITE_Dias_horarios_2_;
   const NroContacto = import.meta.env.VITE_Nro_contacto;
 
   const handleChange = (e) => {
@@ -159,7 +161,13 @@ const Contact = () => {
               <Box sx={{ display: "flex", alignItems: "flex-start", mb: 1 }}>
                 <LocationOnIcon sx={{ mr: 1, fontSize: "1.2rem" }} />
                 <Typography sx={{ fontSize: "0.9rem" }}>
-                  {direccion}, Uruguay
+                  {direccion_1}, Uruguay
+                </Typography>
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "flex-start", mb: 1 }}>
+                <LocationOnIcon sx={{ mr: 1, fontSize: "1.2rem", color: "text.secondary" }} />
+                <Typography sx={{ fontSize: "0.9rem" }}>
+                  {direccion_2}, Uruguay
                 </Typography>
               </Box>
             </Box>
@@ -186,7 +194,7 @@ const Contact = () => {
                 </Tooltip>
 
                 <Typography sx={{ fontSize: "0.9rem" }}>
-                  Whatsapp: {NroContacto}
+                  Whatsapp: +598 0{NroContacto}
                 </Typography>
               </Box>
             </Box>
@@ -201,8 +209,13 @@ const Contact = () => {
               <Box sx={{ display: "flex", alignItems: "flex-start", mb: 1 }}>
                 <AccessTimeIcon sx={{ mr: 1, fontSize: "1.2rem" }} />
                 <Box>
-                  <Typography sx={{ fontSize: "0.9rem" }}>{horario}</Typography>
-                  
+                  <Typography sx={{ fontSize: "0.9rem" }}>{horario_1}</Typography>                  
+                </Box>
+              </Box>
+              <Box sx={{ display: "flex", alignItems: "flex-start", mb: 1 }}>
+                <AccessTimeIcon sx={{ mr: 1, fontSize: "1.2rem", color: "text.secondary" }} />
+                <Box>                  
+                  <Typography sx={{ fontSize: "0.9rem" }}>{horario_2}</Typography>
                 </Box>
               </Box>
             </Box>

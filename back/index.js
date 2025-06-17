@@ -36,10 +36,9 @@ const emailNotificationComercio = process.env.EMAIL_Notification_Comercio;
 const banco = process.env.Banco;
 const bancoCuenta = process.env.Banco_Cuenta;
 const bancoTitular = process.env.Banco_Titular;
-const direccionLocal = process.env.Direccion_local;
-const diasHorarios = process.env.Dias_horarios;
+const direccionLocal = process.env.Direccion_local_1;
+const diasHorarios = process.env.Dias_horarios_1 + ' ' + process.env.Dias_horarios_1_;
 const horasLiberacionCompras = process.env.Horas_Liberacion_Ordenes;
-
 
 // Inicializar Firebase Admin
 admin.initializeApp({
@@ -673,8 +672,8 @@ cron.schedule('0 * * * *', () => {
   checkExpiredOrders();
 });
 
-// Nuevo cron para newsletter (todos los lunes a las 9am)
-cron.schedule('0 9 * * 1', async () => {
+// Nuevo cron para newsletter (todos los jueves a las 9am)
+cron.schedule('0 9 * * 4', async () => {
   //cron.schedule('* * * * *', async () => { //envia cada minuto, para pruebas
   try {
     console.log('Iniciando envío programado de newsletter');

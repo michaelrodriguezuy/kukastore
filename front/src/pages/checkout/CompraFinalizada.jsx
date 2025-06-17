@@ -25,8 +25,8 @@ const CompraFinalizada = () => {
   const cuenta = import.meta.env.VITE_Banco_Cuenta;
   const titular = import.meta.env.VITE_Banco_Titular;
   const horasLiberacionOrden = import.meta.env.VITE_Horas_Liberacion_Ordenes;
-  const direccion = import.meta.env.VITE_Direccion_local;
-  const diasHorarios = import.meta.env.VITE_Dias_horarios;
+  const direccion = import.meta.env.VITE_Direccion_local_1;
+  const diasHorarios = import.meta.env.VITE_Dias_horarios_1 + ' - ' + import.meta.env.VITE_Dias_horarios_1_;
 
   useEffect(() => {
     // Limpiar localStorage después de 10 segundos
