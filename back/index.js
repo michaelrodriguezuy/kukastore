@@ -36,6 +36,7 @@ const emailNotificationComercio = process.env.EMAIL_Notification_Comercio;
 const banco = process.env.Banco;
 const bancoCuenta = process.env.Banco_Cuenta;
 const bancoTitular = process.env.Banco_Titular;
+const nroContacto = process.env.Nro_contacto;
 const direccionLocal = process.env.Direccion_local_1;
 const diasHorarios = process.env.Dias_horarios_1 + ' ' + process.env.Dias_horarios_1_;
 const horasLiberacionCompras = process.env.Horas_Liberacion_Ordenes;
@@ -333,14 +334,14 @@ app.post('/send-email-checkout-user', async (req, res) => {
               <div style="margin-top: 15px;">
                 <p style="color: #dc3545; font-weight: bold;">IMPORTANTE:</p>
                 <p>1. Realice la transferencia al número de cuenta mencionado arriba</p>
-                <p>2. Envíe el comprobante de transferencia a ${emailNotificationComercio}</p>
+                <p>2. Envíe el comprobante de transferencia a ${emailNotificationComercio} o al whatsapp 0${nroContacto}</p>
 
                 <div style="margin-top: 15px; padding: 10px; background-color: #f8f9fa; border-radius: 5px;">
                   <p style="margin: 5px 0;"><strong>Dirección:</strong> ${direccionLocal}</p>
                   <p style="margin: 5px 0;"><strong>Horario:</strong> ${diasHorarios}</p>
                 </div>
 
-                <p style="color: #dc3545;">Si no realiza estos pasos dentro de las próximas ${horasLiberacionCompras} horas, 
+                <p style="color: #dc3545;">Si no realiza estos pasos dentro de las próximas ${horasLiberacionCompras} horas hábiles, 
                 la compra será cancelada automáticamente y los productos serán liberados.</p>
               </div>
             </div>
@@ -349,7 +350,7 @@ app.post('/send-email-checkout-user', async (req, res) => {
         return `
             <div style="margin-top: 20px; padding: 15px; background-color: #fff3cd; border-radius: 5px; border: 1px solid #ffeeba;">
               <h4 style="color: #856404; margin-top: 0;">Instrucciones para el pago en efectivo:</h4>
-              <p>Debe realizar el pago en nuestro local dentro de las próximas ${horasLiberacionCompras} horas.</p>
+              <p>Debe realizar el pago en nuestro local dentro de las próximas ${horasLiberacionCompras} horas hábiles.</p>
 
               <div style="margin-top: 15px;">
                 <p style="color: #dc3545; font-weight: bold;">IMPORTANTE:</p>
@@ -566,24 +567,31 @@ const checkExpiredOrders = async () => {
   try {
     const db = admin.firestore();
     const now = admin.firestore.Timestamp.now();
-    const twentyFourHoursAgo = new Date(now.toDate().getTime() - 24 * 60 * 60 * 1000);
+    const nowDate = now.toDate();
 
-    await writeToLog('Iniciando verificación de órdenes vencidas');
+    await writeToLog('Iniciando verificación de órdenes vencidas en días hábiles');
     await writeToLog(`Fecha actual: ${now.toDate()}`);
-    await writeToLog(`Órdenes anteriores a: ${twentyFourHoursAgo}`);
 
     try {
       const snapshot = await db.collection('orders')
-        .where('estadoCompra', '==', 'En espera')
-        .where('fechaCreacion', '<', twentyFourHoursAgo)
+        .where('estadoCompra', '==', 'En espera')        
         .get();
-
-      await writeToLog(`Se encontraron ${snapshot.size} órdenes vencidas`);
+      
+      let vencidas = 0;
 
       for (const doc of snapshot.docs) {
         const orderData = doc.data();
+        const fechaCreacion = orderData.fechaCreacion?.toDate();
+
+        if (!fechaCreacion) continue;
+
+        const horasTranscurridas = getBusinessHoursDiff(fechaCreacion, nowDate);
+
+        if (horasTranscurridas >= horasLiberacionCompras) {
+          vencidas++;
+
         await writeToLog(`Procesando cancelación de orden ID: ${doc.id}`);
-        await writeToLog(`Detalles de la orden: Cliente: ${orderData.customerData?.nombre}, Email: ${orderData.customerData?.email}`);
+        await writeToLog(`Detalles de la orden: Cliente: ${orderData.customerData?.nombre}, Email: ${orderData.customerData?.email}, Horas hábiles transcurridas: ${horasTranscurridas}`);
 
         // Restaurar stock para cada item
         for (const item of orderData.items || []) {
@@ -626,7 +634,7 @@ const checkExpiredOrders = async () => {
           estadoCompra: 'Cancelado',
           fechaCancelacion: admin.firestore.FieldValue.serverTimestamp(),
           fechaActualizacion: admin.firestore.FieldValue.serverTimestamp(),
-          motivoCancelacion: `Pago no realizado dentro de las ${horasLiberacionCompras} horas`
+          motivoCancelacion: `Pago no realizado dentro de las ${horasLiberacionCompras} horas hábiles`
         });
 
         // Enviar email de cancelación
@@ -640,7 +648,7 @@ const checkExpiredOrders = async () => {
               </div>
               <h2>Orden Cancelada</h2>
               <p>Estimado/a ${orderData.customerData.nombre},</p>
-              <p>Su orden #${doc.id} ha sido cancelada automáticamente debido a que no se recibió el pago dentro del plazo establecido de ${horasLiberacionCompras} horas.</p>
+              <p>Su orden #${doc.id} ha sido cancelada automáticamente debido a que no se recibió el pago dentro del plazo establecido de ${horasLiberacionCompras} horas hábiles.</p>
               <p>Los productos han sido liberados.</p>
               <p>Si aún desea realizar la compra, por favor realice un nuevo pedido.</p>
               <p>Gracias por su comprensión.</p>
@@ -651,8 +659,8 @@ const checkExpiredOrders = async () => {
           await writeToLog(`Orden ${doc.id}: Error al enviar email de cancelación - ${emailError.message}`, 'error');
         }
       }
-
-      await writeToLog(`Proceso de cancelación completado. ${snapshot.size} órdenes procesadas`);
+    }
+      await writeToLog(`Proceso de cancelación completado. ${vencidas} órdenes canceladas por exceder las horas hábiles.`);
 
     } catch (error) {
       await writeToLog(`Error en el proceso de cancelación: ${error.message}`, 'error');
@@ -662,6 +670,23 @@ const checkExpiredOrders = async () => {
     await writeToLog(`Error general en checkExpiredOrders: ${error.message}`, 'error');
     console.error('Error al procesar órdenes vencidas:', error);
   }
+};
+
+//calculo la diferencia de horas hábiles entre dos fechas
+const getBusinessHoursDiff = (startDate, endDate) => {
+  let current = new Date(startDate);
+  let hours = 0;
+
+  while (current < endDate) {
+    const day = current.getDay();
+    // lunes a viernes
+    if (day >= 1 && day <= 5) {
+      hours++;
+    }
+    current.setHours(current.getHours() + 1);
+  }
+
+  return hours;
 };
 
 // Ejecutar inmediatamente al iniciar el servidor
@@ -852,7 +877,7 @@ app.post('/send-email-contact', async (req, res) => {
 // Endpoint para obtener países
 app.get('/api/countries', async (req, res) => {
   try {
-    const response = await axios.get('https://restcountries.com/v3.1/all');
+    const response = await axios.get('https://restcountries.com/v3.1/all?fields=name,cca2');
     const sortedCountries = response.data
       .sort((a, b) => a.name.common.localeCompare(b.name.common))
       .map(country => ({

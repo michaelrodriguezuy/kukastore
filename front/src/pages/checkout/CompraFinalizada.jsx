@@ -24,6 +24,7 @@ const CompraFinalizada = () => {
   const banco = import.meta.env.VITE_Banco;
   const cuenta = import.meta.env.VITE_Banco_Cuenta;
   const titular = import.meta.env.VITE_Banco_Titular;
+  const nroContacto = import.meta.env.VITE_Nro_contacto;
   const horasLiberacionOrden = import.meta.env.VITE_Horas_Liberacion_Ordenes;
   const direccion = import.meta.env.VITE_Direccion_local_1;
   const diasHorarios = import.meta.env.VITE_Dias_horarios_1 + ' - ' + import.meta.env.VITE_Dias_horarios_1_;
@@ -96,10 +97,11 @@ const CompraFinalizada = () => {
               1. Realice la transferencia al número de cuenta mencionado arriba
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              2. Envíe el comprobante de transferencia a {emailNotificationComercio}
+              2. Envíe el comprobante de transferencia a {emailNotificationComercio}, o
+                 al whatsapp 0{nroContacto} para que podamos verificar su pago.
             </Typography>
             <Typography variant="body2" sx={{ mt: 1, color: 'error.main' }}>
-              Si no realiza estos pasos dentro de las próximas {horasLiberacionOrden} horas, 
+              Si no realiza estos pasos dentro de las próximas {horasLiberacionOrden} horas hábiles, 
               la compra será cancelada automáticamente y los productos serán liberados.
             </Typography>
           </Box>
@@ -121,7 +123,7 @@ const CompraFinalizada = () => {
               IMPORTANTE:
             </Typography>
             <Typography variant="body2">
-              Debe realizar el pago en efectivo en nuestro local dentro de las próximas {horasLiberacionOrden} horas.
+              Debe realizar el pago en efectivo en nuestro local dentro de las próximas {horasLiberacionOrden} horas hábiles.
             </Typography>
             <Typography variant="body2" sx={{ mt: 1, color: 'error.main' }}>
               De no efectuar el pago en el plazo establecido, la compra será cancelada 

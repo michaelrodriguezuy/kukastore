@@ -108,6 +108,7 @@ const Checkout = () => {
   const banco = import.meta.env.VITE_Banco;
   const bancoCuenta = import.meta.env.VITE_Banco_Cuenta;
   const bancoTitular = import.meta.env.VITE_Banco_Titular;
+  const nroContacto = import.meta.env.VITE_Nro_contacto;
 
   // Obtener datos del pedido del localStorage
   const [orderData] = useState(() => {
@@ -1336,7 +1337,8 @@ const Checkout = () => {
                         sx={{ mt: 1, color: "text.secondary" }}
                       >
                         Una vez realizada la transferencia, enviar el
-                        comprobante a {emailNotificationComercio}
+                        comprobante a {emailNotificationComercio}, o 
+                        al whatsapp 0{nroContacto}
                       </Typography>
                     </Box>
                   )}
