@@ -1,4 +1,13 @@
-# [](https://github.com/michaelrodriguezuy/kukastore/compare/v2.0.4...v) (2025-06-13)
+# [](https://github.com/michaelrodriguezuy/kukastore/compare/v2.0.5...v) (2025-06-17)
+
+
+### Features
+
+* ultimas actualizaciones varias ([4213f1e](https://github.com/michaelrodriguezuy/kukastore/commit/4213f1e634e199fab1f4beacc39b3f2655c1973b))
+
+
+
+## [2.0.5](https://github.com/michaelrodriguezuy/kukastore/compare/v2.0.4...v2.0.5) (2025-06-13)
 
 
 ### Bug Fixes
