@@ -136,7 +136,7 @@ const Contact = () => {
           }}
         >
           Para obtener más información sobre nuestros productos no dudes en
-          enviarnos un correo electrónico. Nos pondremos en contacto contigo lo
+          enviarnos un mensaje. Nos pondremos en contacto contigo lo
           antes posible.
         </Typography>
       </Container>
