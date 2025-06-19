@@ -1,24 +1,20 @@
-import { Container, Typography, Box, Link as MuiLink } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Box,
+  Link as MuiLink,
+  Paper,
+} from "@mui/material";
+import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import { Link } from "react-router-dom";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import logo from "../../assets/logo/logo.png";
 
 const About = () => {
   return (
     <Box sx={{ paddingTop: "20px" }}>
-      <Container maxWidth="lg">
-        <Typography
-          variant="h4"
-          component="h1"
-          align="center"
-          sx={{
-            fontWeight: 500,
-            mb: 2,
-          }}
-        >
-          Sobre nosotros
-        </Typography>
-      </Container>
+      
 
       <Box
         sx={{
@@ -46,16 +42,63 @@ const About = () => {
         </Container>
       </Box>
 
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 8, textAlign: "center" }}>
-        <Typography variant="body1" paragraph>
-          Somos una empresa dedicada a la venta de productos de alta calidad y
-          durabilidad.
-        </Typography>
-        <Typography variant="body1" paragraph>
-          Nuestro objetivo es ofrecer productos que sean duraderos y de alta
-          calidad, para que nuestros clientes puedan disfrutar de ellos por
-          mucho tiempo.
-        </Typography>
+      <Container maxWidth="md" sx={{ py: { xs: 3, md: 6 } }}>
+        <Paper
+          elevation={3}
+          sx={{ p: { xs: 2, md: 4 }, borderRadius: 3, textAlign: "center" }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              mb: 3,
+            }}
+          >
+            <img
+              src={logo}
+              alt="Logo Kuka"
+              style={{ width: 100, marginBottom: 16 }}
+            />
+          </Box>
+
+          <Typography
+            variant="body1"
+            sx={{ fontSize: { xs: "1rem", md: "1.2rem" }, color: "#444" }}
+          >
+            Kuka es una empresa familiar que apunta al público de chic@s
+            adolescentes y pre adolescentes.
+            <br />
+            Nuestra principal premisa es entender y escuchar a un público
+            sumamente exigente y cambiante que siempre busca lo último en moda y
+            tendencias en vestimenta y accesorios.
+            <br />
+            {/* Frase en quote */}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                mt: 2,
+              }}
+            >
+              <FormatQuoteIcon sx={{ fontSize: 32, mr: 1 }} />
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  fontStyle: "italic",
+
+                  fontWeight: 500,
+                }}
+              >
+                El leitmotiv de nuestra marca es: <b>La moda en tus manos</b>.
+              </Typography>
+              <FormatQuoteIcon
+                sx={{ fontSize: 32, ml: 1, transform: "scaleX(-1)" }}
+              />
+            </Box>
+          </Typography>
+        </Paper>
       </Container>
     </Box>
   );

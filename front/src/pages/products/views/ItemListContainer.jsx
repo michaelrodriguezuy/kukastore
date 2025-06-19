@@ -24,7 +24,7 @@ import {
   Link as MuiLink,
   Menu,
   Divider,
-  Tooltip
+  Tooltip,
 } from "@mui/material";
 
 import { CartContext } from "../../../context/CartContext";
@@ -33,14 +33,14 @@ import { alpha } from "@mui/material/styles";
 import ProductCard from "../../../components/common/ProductCard/ProductCard";
 import { getFormatCurrency } from "../../../utils/formatCurrency";
 import { customBlack } from "../../../utils/colors";
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import BenefitsBar from '../../../components/common/BenefitsBar';
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import BenefitsBar from "../../../components/common/BenefitsBar";
 
 const ItemListContainer = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('Todas');
+  const [selectedCategory, setSelectedCategory] = useState("Todas");
   const [anchorEl, setAnchorEl] = useState(null);
   const [itemsPerPage, setItemsPerPage] = useState(16);
   const [currentPage, setCurrentPage] = useState(0);
@@ -58,22 +58,25 @@ const ItemListContainer = () => {
       try {
         const productsRef = collection(db, "products");
         const querySnapshot = await getDocs(productsRef);
-        const productsData = querySnapshot.docs.map(doc => ({
+        const productsData = querySnapshot.docs.map((doc) => ({
           id: doc.id,
-          ...doc.data()
+          ...doc.data(),
         }));
         setProducts(productsData);
 
         // Extraer y filtrar categorías únicas
-        const uniqueCategories = [...new Set(productsData
-          .map(product => product.category)
-          .filter(category => category && category.trim() !== '')
-        )].sort(); // Ordenar alfabéticamente
+        const uniqueCategories = [
+          ...new Set(
+            productsData
+              .map((product) => product.category)
+              .filter((category) => category && category.trim() !== "")
+          ),
+        ].sort(); // Ordenar alfabéticamente
         setCategories(uniqueCategories);
 
         // Si hay término de búsqueda, resetear categoría
         if (searchTerm) {
-          setSelectedCategory('Todas');
+          setSelectedCategory("Todas");
         }
       } catch (error) {
         console.error("Error al cargar productos:", error);
@@ -99,14 +102,14 @@ const ItemListContainer = () => {
 
   // Filtrar productos
   const filteredProducts = products
-  .filter((product) => {
-    if (Array.isArray(product.variants) && product.variants.length > 0) {
-      return product.variants.some(variant => variant.stock > 0);
-    }
-    return product.stock > 0;
-  })
     .filter((product) => {
-      if (selectedCategory === 'Todas') return true;
+      if (Array.isArray(product.variants) && product.variants.length > 0) {
+        return product.variants.some((variant) => variant.stock > 0);
+      }
+      return product.stock > 0;
+    })
+    .filter((product) => {
+      if (selectedCategory === "Todas") return true;
       return product.category === selectedCategory;
     })
     .filter((product) => {
@@ -115,15 +118,15 @@ const ItemListContainer = () => {
         product.title,
         product.description,
         product.category,
-        product.code
-      ].map(field => field?.toLowerCase() || '');
-      
-      return searchFields.some(field => field.includes(searchTerm));
+        product.code,
+      ].map((field) => field?.toLowerCase() || "");
+
+      return searchFields.some((field) => field.includes(searchTerm));
     });
 
   // Mantener productos únicos
   const uniqueProducts = Array.from(
-    new Map(filteredProducts.map(product => [product.code, product])).values()
+    new Map(filteredProducts.map((product) => [product.code, product])).values()
   );
 
   const pageCount = Math.ceil(uniqueProducts.length / itemsPerPage);
@@ -135,12 +138,12 @@ const ItemListContainer = () => {
   // Si no hay resultados, mostrar mensaje
   if (searchTerm && filteredProducts.length === 0) {
     return (
-      <Typography 
-        variant="h5" 
-        sx={{ 
-          textAlign: 'center', 
+      <Typography
+        variant="h5"
+        sx={{
+          textAlign: "center",
           marginTop: 5,
-          marginBottom: 5 
+          marginBottom: 5,
         }}
       >
         No se encontraron productos que coincidan con "{searchTerm}"
@@ -149,63 +152,50 @@ const ItemListContainer = () => {
   }
 
   return (
-    <Box sx={{ paddingTop: '20px' }}>
-      <Container maxWidth="lg">
-        <Typography 
-          variant="h4" 
-          component="h1"
-          align="center"
-          sx={{ 
-            fontWeight: 500,
-            mb: 2
-          }}
-        >
-          Tienda
-        </Typography>
-      </Container>
-
-      <Box 
-        sx={{ 
-          backgroundColor: 'rgba(0, 0, 0, 0.03)',
+    <Box sx={{ paddingTop: "20px" }}>
+      <Box
+        sx={{
+          backgroundColor: "rgba(0, 0, 0, 0.03)",
           py: 0.5,
           px: 2,
-          width: '100%',
+          width: "100%",
         }}
       >
         <Container maxWidth="lg">
-          <Box sx={{ 
-            display: 'flex', 
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            height: '40px'
-          }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              height: "40px",
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
               <Tooltip title="Solo se muestran las categorías que tienen artículos">
-
-              <Button
-                startIcon={<FilterListIcon />}
-                onClick={handleFilterClick}
-                variant="outlined"
-                size="small"
+                <Button
+                  startIcon={<FilterListIcon />}
+                  onClick={handleFilterClick}
+                  variant="outlined"
+                  size="small"
                 >
-                {selectedCategory === 'Todas' ? 'Filtros' : selectedCategory}
-              </Button>
-                </Tooltip>
+                  {selectedCategory === "Todas" ? "Filtros" : selectedCategory}
+                </Button>
+              </Tooltip>
 
               <Menu
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleFilterClose}
               >
-                <MenuItem 
-                  onClick={() => handleCategorySelect('Todas')}
-                  selected={selectedCategory === 'Todas'}
+                <MenuItem
+                  onClick={() => handleCategorySelect("Todas")}
+                  selected={selectedCategory === "Todas"}
                 >
                   Todas las categorías
                 </MenuItem>
                 <Divider />
                 {categories.map((category) => (
-                  <MenuItem 
+                  <MenuItem
                     key={category}
                     onClick={() => handleCategorySelect(category)}
                     selected={selectedCategory === category}
@@ -219,17 +209,23 @@ const ItemListContainer = () => {
 
               <Typography variant="body2" color="text.secondary">
                 Mostrando {currentPage * itemsPerPage + 1}-
-                {Math.min((currentPage + 1) * itemsPerPage, uniqueProducts.length)} de {uniqueProducts.length} resultados
+                {Math.min(
+                  (currentPage + 1) * itemsPerPage,
+                  uniqueProducts.length
+                )}{" "}
+                de {uniqueProducts.length} resultados
               </Typography>
             </Box>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
               <Typography variant="body2">Mostrar</Typography>
               <TextField
                 select
                 size="small"
                 value={itemsPerPage}
-                onChange={(event) => setItemsPerPage(parseInt(event.target.value))}
+                onChange={(event) =>
+                  setItemsPerPage(parseInt(event.target.value))
+                }
                 sx={{ width: 80 }}
               >
                 <MenuItem value={16}>16</MenuItem>
@@ -239,25 +235,18 @@ const ItemListContainer = () => {
             </Box>
           </Box>
 
-          <Breadcrumbs 
+          <Breadcrumbs
             separator={<NavigateNextIcon fontSize="small" />}
             sx={{ mt: 1 }}
           >
-            <MuiLink 
-              component={Link} 
-              to="/"
-              underline="none"
-              color="inherit"
-            >
+            <MuiLink component={Link} to="/" underline="none" color="inherit">
               Inicio
             </MuiLink>
-            <Typography color="text.primary">
-              Tienda
-            </Typography>
+            <Typography color="text.primary">Tienda</Typography>
           </Breadcrumbs>
         </Container>
       </Box>
-      
+
       <Container maxWidth="lg" sx={{ mt: 4 }}>
         <Grid container spacing={3}>
           {displayedProducts.map((product) => (
@@ -267,12 +256,14 @@ const ItemListContainer = () => {
           ))}
         </Grid>
 
-        <Box sx={{ 
-          display: 'flex', 
-          justifyContent: 'center',
-          mt: 4,
-          mb: 4
-        }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            mt: 4,
+            mb: 4,
+          }}
+        >
           <Pagination
             count={pageCount}
             page={currentPage + 1}

@@ -6,6 +6,7 @@ import {
   Link as MuiLink,
   Grid,
   Stack,
+  Paper,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
@@ -28,17 +29,6 @@ const emailNotificationComercio = import.meta.env
 const OpcionesPago = () => {
   return (
     <Box sx={{ paddingTop: "20px" }}>
-      <Container maxWidth="lg">
-        <Typography
-          variant="h4"
-          component="h1"
-          align="center"
-          sx={{ fontWeight: 500, mb: 2 }}
-        >
-          Opciones de pago
-        </Typography>
-      </Container>
-
       <Box sx={{ backgroundColor: "rgba(0, 0, 0, 0.03)", py: 2, px: 2 }}>
         <Container maxWidth="lg">
           <Box sx={{ display: "flex", alignItems: "center", height: "40px" }}>
@@ -123,53 +113,57 @@ const OpcionesPago = () => {
           </Grid>
         </Grid>
 
-        {/* Información de pagos y envíos */}
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="body1" paragraph align="center">
-            Los pagos se procesan únicamente en{" "}
-            <Box component="span" fontWeight="bold">
-              días hábiles
-            </Box>{" "}
-            y en{" "}
-            <Box component="span" fontWeight="bold">
-              horario comercial
-            </Box>
-            , sin excepción.
-          </Typography>
+        <Paper
+          elevation={3}
+          sx={{ p: { xs: 2, md: 4 }, borderRadius: 3, textAlign: "center", marginBottom:"20px" }}
+        >
+          {/* Información de pagos y envíos */}
+          <Box sx={{ mt: 4 }}>
+            <Typography variant="body1" paragraph align="center">
+              Los pagos se procesan únicamente en{" "}
+              <Box component="span" fontWeight="bold">
+                días hábiles
+              </Box>{" "}
+              y en{" "}
+              <Box component="span" fontWeight="bold">
+                horario comercial
+              </Box>
+              , sin excepción.
+            </Typography>
 
-          <Typography variant="body1" paragraph align="center">
-            Los envíos se despachan el{" "}
-            <Box component="span" fontWeight="bold">
-              mismo día
-            </Box>{" "}
-            si el pago se confirma antes de las{" "}
-            <Box component="span" fontWeight="bold">
-              16:00 horas
-            </Box>
-            . De lo contrario, el envío se realizará el{" "}
-            <Box component="span" fontWeight="bold">
-              día hábil siguiente
-            </Box>
-            , luego de confirmado el pago.
-          </Typography>
+            <Typography variant="body1" paragraph align="center">
+              Los envíos se despachan el{" "}
+              <Box component="span" fontWeight="bold">
+                mismo día
+              </Box>{" "}
+              si el pago se confirma antes de las{" "}
+              <Box component="span" fontWeight="bold">
+                16:00 horas
+              </Box>
+              . De lo contrario, el envío se realizará el{" "}
+              <Box component="span" fontWeight="bold">
+                día hábil siguiente
+              </Box>
+              , luego de confirmado el pago.
+            </Typography>
 
-          <Typography variant="body1" paragraph align="center">
-            El{" "}
-            <Box component="span" fontWeight="bold">
-              costo del envío
-            </Box>{" "}
-            corre por cuenta del comprador y se envia por{" "}
-            <Box component="span" fontWeight="bold">
-              agencia de su preferencia
-            </Box>
-            , siempre{" "}
-            <Box component="span" fontWeight="bold">
-              previo depósito y confirmación del pago{" "}
-            </Box>
-            .
-          </Typography>
-        </Box>
-
+            <Typography variant="body1" paragraph align="center">
+              El{" "}
+              <Box component="span" fontWeight="bold">
+                costo del envío
+              </Box>{" "}
+              corre por cuenta del comprador y se envia por{" "}
+              <Box component="span" fontWeight="bold">
+                agencia de su preferencia
+              </Box>
+              , siempre{" "}
+              <Box component="span" fontWeight="bold">
+                previo depósito y confirmación del pago{" "}
+              </Box>
+              .
+            </Typography>
+          </Box>
+        </Paper>
         {/* Contacto */}
         <Typography variant="h6" gutterBottom align="center">
           ¿Tenés dudas?

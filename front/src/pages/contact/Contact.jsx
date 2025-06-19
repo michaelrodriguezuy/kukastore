@@ -79,19 +79,7 @@ const Contact = () => {
 
   return (
     <Box sx={{ paddingTop: "20px" }}>
-      <Container maxWidth="lg" sx={{ px: { xs: 4, sm: 6, md: 8 } }}>
-        <Typography
-          variant="h4"
-          component="h1"
-          align="center"
-          sx={{
-            fontWeight: 500,
-            mb: 2,
-          }}
-        >
-          Contacto
-        </Typography>
-      </Container>
+      
 
       <Box
         sx={{
