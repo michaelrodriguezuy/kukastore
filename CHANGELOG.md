@@ -1,4 +1,8 @@
-# [](https://github.com/michaelrodriguezuy/kukastore/compare/v2.0.10...v) (2025-06-20)
+# [](https://github.com/michaelrodriguezuy/kukastore/compare/v2.0.11...v) (2025-06-20)
+
+
+
+## [2.0.11](https://github.com/michaelrodriguezuy/kukastore/compare/v2.0.10...v2.0.11) (2025-06-20)
 
 
 
