@@ -23,8 +23,7 @@ const nroContacto = import.meta.env.VITE_Nro_contacto;
 const banco = import.meta.env.VITE_Banco;
 const bancoCuenta = import.meta.env.VITE_Banco_Cuenta;
 const bancoTitular = import.meta.env.VITE_Banco_Titular;
-const emailNotificationComercio = import.meta.env
-  .VITE_EMAIL_Notification_Comercio;
+const emailNotificationComercio = import.meta.env.VITE_EMAIL_Notification_Comercio;
 
 const OpcionesPago = () => {
   return (
