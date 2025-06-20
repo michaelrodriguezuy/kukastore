@@ -837,12 +837,12 @@ app.post('/send-email-contact', async (req, res) => {
   try {
     await sendMail(
       emailNotificationComercio, // email destino (correo cliente de micha)
-      'Nuevo mensaje de contacto',
+      'Tienes un mensaje desde tu eCommerce',
       `
             <div style="text-align: center;">
               <img src="${getLogoBase64()}" alt="kuka store" style="width: 150px; height: auto; margin-bottom: 20px;" />
             </div>
-            <h2>Nuevo mensaje de contacto</h2>
+            <h2>Nuevo mensaje de contacto desde tu eCommerce</h2>
             <p><strong>Nombre:</strong> ${name}</p>
             <p><strong>Email:</strong> ${email}</p>
             <p><strong>Mensaje:</strong></p>
