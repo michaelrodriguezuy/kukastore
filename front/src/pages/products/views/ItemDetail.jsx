@@ -68,6 +68,13 @@ const ItemDetail = () => {
     setSelectedSize(null);
   }, [id]);
 
+  const tieneStock = (product) => {
+    if (Array.isArray(product.variants) && product.variants.length > 0) {
+      return product.variants.some((variant) => variant.stock > 0);
+    }
+    return product.stock > 0;
+  };
+
   useEffect(() => {
     const getProduct = async () => {
       try {
@@ -133,7 +140,8 @@ const ItemDetail = () => {
               id: doc.id,
               ...doc.data()
             }))
-            .filter(prod => prod.id !== id);
+            .filter(prod => prod.id !== id)
+            .filter(tieneStock);
 
           setRelatedProducts(filteredRelated);
         } else {
