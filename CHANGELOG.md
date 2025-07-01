@@ -1,4 +1,13 @@
-# [](https://github.com/michaelrodriguezuy/kukastore/compare/v2.0.12...v) (2025-07-01)
+# [](https://github.com/michaelrodriguezuy/kukastore/compare/v2.0.13...v) (2025-07-01)
+
+
+### Bug Fixes
+
+* muestra de productos en home, y productos relacionados solo con stock ([0d5a0ef](https://github.com/michaelrodriguezuy/kukastore/commit/0d5a0ef2242a87368c848ef131f07f537f3c38ce))
+
+
+
+## [2.0.13](https://github.com/michaelrodriguezuy/kukastore/compare/v2.0.12...v2.0.13) (2025-07-01)
 
 
 
